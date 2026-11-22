@@ -90,6 +90,17 @@ TOOLS = [
         }},
     },
     {
+        "name": "portfolio_breakdown",
+        "description": "Deterministic investment portfolio analysis over ALL visible holdings: total value, split by asset class "
+                       "(listed equity, mutual funds, bonds, gold…), by fund house / issuer, top holdings with % of portfolio, "
+                       "and unrealised gains/losses where the statement provides cost. Use this for any portfolio total, share, "
+                       "concentration or gain/loss question instead of adding holdings yourself.",
+        "input_schema": {"type": "object", "additionalProperties": False, "properties": {
+            "member_ids": {**MEMBER_IDS, "description": "Omit for everyone visible to the asker."},
+            "top_n": {"type": "integer", "description": "How many top holdings / gainers / losers to list (default 10)."},
+        }},
+    },
+    {
         "name": "calculate",
         "description": "Exact decimal arithmetic for any other number you need (+ - * / ** parentheses, min, max, round). "
                        "You must use this instead of doing maths yourself. Give a short label.",
@@ -153,6 +164,7 @@ How to work:
 - Investigate with tools before answering. Start with get_family_profile, then gather what the question needs. Call independent tools in parallel.
 - The family graph lives in Neo4j: use member_dependency_graph to trace who is affected by a member's change (co-borrowers, nominees, secured assets), and query_family_graph for other relationship questions.
 - Every number in your answer must come from a tool result. Never do arithmetic in your head — use calculate, household_cashflow or evaluate_property_purchase.
+- For portfolio totals, shares, concentration or gains use portfolio_breakdown — never assemble a total by adding a hand-picked list of holdings.
 - Think like a family financial planner: who earns, who owns, who owes, life stage (ages, retirement), how one member's change affects others, \
 recent changes in history, concentration risk, insurance/nominee coverage, and remembered goals.
 - For what-if questions, compare the baseline against the scenario (run both). If the family has a remembered goal, re-evaluate it under the scenario.
@@ -304,6 +316,53 @@ class ToolBox:
             "assumptions": finance.assumption_text(res["params"], int(horizon_months)),
             "verdict_rule": "affordable if no funding gap, EMI ≤ 40% of income and positive surplus; stretch if gap ≤ 15% of upfront and EMI ≤ 50%",
         }
+
+    def portfolio_breakdown(self, member_ids=None, top_n=10) -> dict:
+        self._check_members(member_ids)
+        rows = [f for f in self.current if f.record.type == "investment" and f.record.value is not None
+                and f.record.currency == finance.BASE_CURRENCY
+                and (not member_ids or {f.record.member_id, *f.record.co_owner_ids} & set(member_ids))]
+        total = sum((f.record.value for f in rows), Decimal(0))
+        if not rows or total == 0:
+            return {"total": "0", "note": "No INR investment holdings visible."}
+        share = lambda v: str(q(v / total * 100, "0.1"))
+
+        def house(f):
+            n = (f.record.description or "").strip()
+            first = n.split()[0].strip("#-").upper() if n else "UNKNOWN"
+            return {"PARAG": "PPFAS", "GOVT": "GOVT OF INDIA (SGB)"}.get(first, first)
+
+        def group(key):
+            g: dict[str, Decimal] = {}
+            for f in rows:
+                g[key(f)] = g.get(key(f), Decimal(0)) + f.record.value
+            return [{"group": k, "value": str(q(v, "0.01")), "readable": inr_short(v), "share_pct": share(v)}
+                    for k, v in sorted(g.items(), key=lambda kv: -kv[1])]
+
+        top = sorted(rows, key=lambda f: -f.record.value)[:top_n]
+        with_gain = [f for f in rows if f.record.attr_decimal("unrealised_gain") is not None]
+        gains = sorted(with_gain, key=lambda f: -f.record.attr_decimal("unrealised_gain"))
+        cost = sum((f.record.attr_decimal("cost_basis") or Decimal(0) for f in with_gain), Decimal(0))
+        unreal = sum((f.record.attr_decimal("unrealised_gain") for f in with_gain), Decimal(0))
+        item = lambda f: {"record_id": f.record.record_id, "name": f.record.description, "value": str(f.record.value),
+                          "readable": inr_short(f.record.value), "share_pct": share(f.record.value),
+                          "unrealised_gain": f.record.attributes.get("unrealised_gain"), "category": f.record.category}
+        self._log([finance.Calc("Total investment portfolio", f"sum of {len(rows)} holdings", inr(total), total, [f.record.record_id for f in rows])])
+        if with_gain:
+            self._log([finance.Calc("Unrealised gain on holdings with cost basis", f"{len(with_gain)} MF folios: value − cost",
+                                    inr(unreal), unreal, [f.record.record_id for f in with_gain])])
+        for f in top[:5]:
+            self._log([finance.Calc(f"{(f.record.description or '')[:40]} — share of portfolio",
+                                    f"{inr(f.record.value)} ÷ {inr(total)}", f"{share(f.record.value)}%", f.record.value / total * 100,
+                                    [f.record.record_id])])
+        return {"holdings_count": len(rows), "total": str(q(total, "0.01")), "readable_total": inr_short(total),
+                "by_asset_class": group(lambda f: f.record.category), "by_fund_house_or_issuer": group(house)[:12],
+                "top_holdings": [item(f) for f in top],
+                "unrealised": {"holdings_with_cost": len(with_gain), "cost": str(q(cost, "0.01")), "gain": str(q(unreal, "0.01")),
+                               "gain_pct_on_cost": str(q(unreal / cost * 100, "0.1")) if cost else None,
+                               "top_gainers": [item(f) for f in gains[:min(5, top_n)]],
+                               "top_losers": [item(f) for f in gains[::-1][:min(5, top_n)] if f.record.attr_decimal("unrealised_gain") < 0]},
+                "as_of": max(str(f.effective_from) for f in rows)}
 
     def calculate(self, label, expression) -> dict:
         v = safe_eval(expression)

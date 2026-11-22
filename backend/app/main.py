@@ -5,7 +5,7 @@ from typing import Optional
 import json
 import logging
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ValidationError
@@ -17,6 +17,27 @@ from .contract import FamilyFinancialData, RecordBatch
 log = logging.getLogger("familyos.api")
 
 app = FastAPI(title="FamilyOS Context Engine", version="1.0")
+
+# Requests relayed by Cloudflare (the public demo tunnel) carry cf-* headers; Next's /api rewrite forwards them.
+_EXTERNAL_HEADERS = ("cf-connecting-ip", "cf-ray", "cdn-loop")
+
+
+def is_external(request) -> bool:
+    h = request.headers
+    if any(k in h for k in _EXTERNAL_HEADERS):
+        return True
+    host = (h.get("x-forwarded-host") or h.get("host") or "").split(":")[0]
+    return host not in ("localhost", "127.0.0.1", "")
+
+
+@app.middleware("http")
+async def private_family_gate(request, call_next):
+    """Real-person (private) families are served to this machine only — never through the public tunnel."""
+    parts = request.url.path.split("/")
+    if len(parts) > 3 and parts[1:3] == ["api", "family"] and store.is_private(parts[3]) and is_external(request):
+        from fastapi.responses import JSONResponse
+        return JSONResponse({"detail": "family not found"}, status_code=404)
+    return await call_next(request)
 
 
 @app.on_event("startup")
@@ -59,10 +80,13 @@ def health(family_id: Optional[str] = Query(None)):
 
 
 @app.get("/api/families")
-def families():
+def families(request: Request):
     """Demo family index: id, name, city, summary, default viewer and suggested questions."""
     out = []
+    external = is_external(request)
     for f in store.families():
+        if external and store.is_private(f["family_id"]):
+            continue
         try:
             ctx = store.get(f["family_id"])
             out.append({**f, "member_count": len(ctx.members), "record_count": len(ctx.facts)})

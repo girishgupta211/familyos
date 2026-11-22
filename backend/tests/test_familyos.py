@@ -250,3 +250,14 @@ def test_mf_engine_guards(monkeypatch, tmp_path):
         m.call("mf_submitRiskProfile", {}, "F002", "M203")
     with pytest.raises(m.MFEngineError, match="NO_IDENTITY"):      # unlinked member: refused before any network call
         m.call("mf_getPortfolioHealthScore", {}, "F002", "M204")
+
+
+def test_cas_same_isin_in_two_folios_are_separate_holdings():
+    from app.cas_nsdl import CasParse, Holding, to_contract_a
+    from datetime import date
+    cas = CasParse(as_of=date(2026, 9, 30), holder_name="Test",
+                   holdings=[Holding("mf_folio", "INF879O01027", "Flexi Cap", Decimal(10), Decimal(1), Decimal(100)),
+                             Holding("mf_folio", "INF879O01027", "Flexi Cap", Decimal(5), Decimal(1), Decimal(50))])
+    p = to_contract_a(cas, "P999", "P999-M1", "x.pdf")
+    assert len({r["entity"]["entity_id"] for r in p["financial_records"]}) == 2
+    assert "PAN" not in json.dumps(p) and all(k in ("member_id", "name", "relationship") for k in p["members"][0])

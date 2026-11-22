@@ -11,7 +11,7 @@ if [ "${FAMILYOS_NEO4J:-1}" != "0" ] && command -v docker >/dev/null; then
   if docker ps -a --format '{{.Names}}' | grep -qx familyos-neo4j; then
     docker start familyos-neo4j >/dev/null
   else
-    docker run -d --name familyos-neo4j -p 7474:7474 -p 7687:7687 \
+    docker run -d --name familyos-neo4j -p 127.0.0.1:7474:7474 -p 127.0.0.1:7687:7687 \
       -e NEO4J_AUTH=neo4j/familyos-demo -e NEO4J_server_memory_heap_max__size=1G neo4j:5-community >/dev/null
   fi
   echo -n "Waiting for Neo4j"; for _ in $(seq 1 40); do curl -s -o /dev/null localhost:7474 && break; echo -n "."; sleep 2; done; echo " ready (browser: http://localhost:7474, neo4j / familyos-demo)"

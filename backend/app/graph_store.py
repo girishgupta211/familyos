@@ -98,6 +98,10 @@ def sync(ctx) -> Optional[dict]:
         return None
     from .context_engine import TODAY
     fam = ctx.family_id
+    if fam.startswith("P"):  # real-person data never goes into the shared graph database
+        with d.session() as s:
+            s.run("MATCH (n {family_id: $f}) DETACH DELETE n", f=fam).consume()
+        return None
     facts = _shared_facts(ctx)
     fact_ids = {f.record.record_id for f in facts}
     ent_ids = {f.entity_id for f in facts}

@@ -448,8 +448,11 @@ class ContextStore:
         return {"accepted": list(incoming), "memory_changes": changes,
                 "ingested_at": datetime.now(timezone.utc).isoformat()}
 
+    def is_private(self, family_id: str) -> bool:
+        return family_id.startswith("P")
+
     def families(self) -> list[dict]:
-        idx = self._load_json(self.dir / "families.json", [])
+        idx = self._load_json(self.dir / "families.json", []) + self._load_json(self.dir / "private_families.json", [])
         have = {p.name.split(".")[0] for p in self.dir.glob("*.financial.json")}
         from . import mcp_source
         if mcp_source.configured():

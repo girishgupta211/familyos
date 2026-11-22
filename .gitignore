@@ -12,3 +12,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .DS_Store
+# private, real-person data — never commit
+backend/data/P*.json
+backend/data/private_families.json
+*.pdf
