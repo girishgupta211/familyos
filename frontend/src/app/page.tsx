@@ -86,7 +86,7 @@ export default function Home() {
   }, [viewer, familyId]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { api.health().then(setLlm).catch(() => setLlm(null)); }, [ov]);
+  useEffect(() => { api.health().then(setLlm).catch(() => { /* keep last known status */ }); }, [ov]);
 
   const members = ov?.members ?? [];
   const viewerName = members.find((m) => m.member_id === viewer)?.name ?? viewer;
@@ -124,8 +124,8 @@ export default function Home() {
               </option>
             ))}
           </select>
-          <span className={`rounded-full px-2.5 py-1 ${llm?.llm ? "bg-accent/15 text-accent" : "bg-gold/15 text-gold"}`}>
-            {llm?.llm ? `✦ Agentic · ${llm.model}${llm.speed === "fast" ? " · fast" : ""}` : "● Deterministic mode (no LLM key)"}
+          <span className={`rounded-full px-2.5 py-1 ${llm === null ? "bg-line text-muted" : llm.llm ? "bg-accent/15 text-accent" : "bg-gold/15 text-gold"}`}>
+            {llm === null ? "Checking AI…" : llm.llm ? `✦ Agentic · ${llm.model}${llm.speed === "fast" ? " · fast" : ""}` : "● Fallback mode (Claude unavailable)"}
           </span>
           {llm?.neo4j && (
             <span className={`rounded-full px-2.5 py-1 ${llm.neo4j.connected ? "bg-sky/15 text-sky" : "bg-line text-muted"}`}>
