@@ -1,0 +1,1413 @@
+{
+  "schema_version": "1.0",
+  "family_id": "F002",
+  "generated_at": "2026-11-21T18:00:00Z",
+  "members": [
+    {
+      "member_id": "M201",
+      "name": "Venkatesh Iyer",
+      "relationship": "grandfather",
+      "date_of_birth": "1954-06-03",
+      "spouse_id": "M202"
+    },
+    {
+      "member_id": "M202",
+      "name": "Kamala Iyer",
+      "relationship": "grandmother",
+      "date_of_birth": "1958-01-19",
+      "spouse_id": "M201"
+    },
+    {
+      "member_id": "M203",
+      "name": "Suresh Iyer",
+      "relationship": "son",
+      "date_of_birth": "1980-09-12",
+      "spouse_id": "M204",
+      "parent_ids": [
+        "M201",
+        "M202"
+      ]
+    },
+    {
+      "member_id": "M204",
+      "name": "Meera Iyer",
+      "relationship": "daughter_in_law",
+      "date_of_birth": "1983-02-27",
+      "spouse_id": "M203"
+    },
+    {
+      "member_id": "M205",
+      "name": "Ananya Iyer",
+      "relationship": "granddaughter",
+      "date_of_birth": "2007-05-08",
+      "parent_ids": [
+        "M203",
+        "M204"
+      ]
+    },
+    {
+      "member_id": "M206",
+      "name": "Rohan Iyer",
+      "relationship": "grandson",
+      "date_of_birth": "2012-11-30",
+      "parent_ids": [
+        "M203",
+        "M204"
+      ]
+    },
+    {
+      "member_id": "M207",
+      "name": "Karthik Iyer",
+      "relationship": "son",
+      "date_of_birth": "1988-03-22",
+      "parent_ids": [
+        "M201",
+        "M202"
+      ]
+    }
+  ],
+  "financial_records": [
+    {
+      "record_id": "R201",
+      "member_id": "M201",
+      "type": "income",
+      "category": "pension",
+      "description": "Central government pension",
+      "amount": "68000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D201",
+        "filename": "venkatesh_pension_slip_oct2026.pdf",
+        "document_type": "pension_slip"
+      },
+      "valid_from": "2014-07-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "PEN-CPAO-M201",
+        "entity_type": "pension_source",
+        "name": "Central Pension Accounting Office"
+      }
+    },
+    {
+      "record_id": "R202",
+      "member_id": "M201",
+      "type": "investment",
+      "category": "senior_citizen_savings_scheme",
+      "description": "SCSS deposit (8.2%, 5-year lock-in)",
+      "amount": "3000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D202",
+        "filename": "venkatesh_scss_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2023-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-SCSS-M201",
+        "entity_type": "deposit",
+        "name": "Senior Citizens Savings Scheme",
+        "institution": "State Bank of India"
+      },
+      "attributes": {
+        "interest_rate_pct": "8.2",
+        "liquidity": "locked",
+        "lock_in_until": "2028-04-01"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R203",
+      "member_id": "M201",
+      "type": "investment",
+      "category": "fixed_deposit",
+      "description": "IOB fixed deposits (laddered)",
+      "amount": "1800000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D203",
+        "filename": "venkatesh_iob_fd_receipts.pdf",
+        "document_type": "fd_receipt"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-IOB-M201",
+        "entity_type": "deposit",
+        "name": "IOB fixed deposits",
+        "institution": "Indian Overseas Bank"
+      },
+      "attributes": {
+        "interest_rate_pct": "7.25"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R204",
+      "member_id": "M201",
+      "type": "income",
+      "category": "interest_income",
+      "description": "FD interest (reported in AIS)",
+      "amount": "135000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D204",
+        "filename": "venkatesh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-IOB-M201",
+        "entity_type": "deposit",
+        "name": "IOB fixed deposits",
+        "institution": "Indian Overseas Bank"
+      }
+    },
+    {
+      "record_id": "R205",
+      "member_id": "M201",
+      "type": "income",
+      "category": "interest_income",
+      "description": "SCSS interest (reported in AIS)",
+      "amount": "246000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D204",
+        "filename": "venkatesh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-SCSS-M201",
+        "entity_type": "deposit",
+        "name": "Senior Citizens Savings Scheme",
+        "institution": "State Bank of India"
+      }
+    },
+    {
+      "record_id": "R206",
+      "member_id": "M201",
+      "type": "asset",
+      "category": "residential_property",
+      "description": "Ancestral house, Mylapore (self-occupied, inherited)",
+      "amount": "28000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D205",
+        "filename": "mylapore_legal_heir_certificate_and_patta.pdf",
+        "document_type": "property_document"
+      },
+      "valid_from": "2009-11-02",
+      "valid_until": null,
+      "confidence": 0.75,
+      "co_owner_ids": [
+        "M207"
+      ],
+      "entity": {
+        "entity_id": "PROP-MYLAPORE",
+        "entity_type": "property",
+        "name": "Ancestral house, Mylapore"
+      },
+      "attributes": {
+        "self_occupied": "true",
+        "valuation_basis": "guideline value × 1.6"
+      },
+      "as_of": "2026-04-01"
+    },
+    {
+      "record_id": "R207",
+      "member_id": "M201",
+      "type": "insurance",
+      "category": "health_senior_citizen",
+      "description": "Senior citizen health policy (30% co-pay)",
+      "amount": "1000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D206",
+        "filename": "senior_health_policy_schedule.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-SENIOR-M201",
+        "entity_type": "insurance_policy",
+        "name": "Senior citizen health policy ••4471",
+        "institution": "Star Health"
+      },
+      "attributes": {
+        "premium": "62000",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M201,M202",
+        "copay_pct": "30",
+        "cover_until": "2027-03-31"
+      }
+    },
+    {
+      "record_id": "R208",
+      "member_id": "M201",
+      "type": "tax",
+      "category": "tds_on_interest",
+      "description": "TDS on FD/SCSS interest, FY 2025-26 (AIS)",
+      "amount": "38100",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D204",
+        "filename": "venkatesh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26"
+      }
+    },
+    {
+      "record_id": "R209",
+      "member_id": "M201",
+      "type": "expense",
+      "category": "medical",
+      "description": "Medicines & check-ups for both grandparents",
+      "amount": "15000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D207",
+        "filename": "venkatesh_iob_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-01-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "co_owner_ids": [
+        "M202"
+      ]
+    },
+    {
+      "record_id": "R210",
+      "member_id": "M201",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "IOB savings account",
+      "amount": "420000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D207",
+        "filename": "venkatesh_iob_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-IOB-1188",
+        "entity_type": "bank_account",
+        "name": "IOB Savings ••1188",
+        "institution": "Indian Overseas Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R211",
+      "member_id": "M202",
+      "type": "asset",
+      "category": "gold_jewellery",
+      "description": "Gold jewellery, ~150 g (heirloom)",
+      "amount": "2200000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D208",
+        "filename": "gold_valuation_certificate_2026.pdf",
+        "document_type": "valuation_report"
+      },
+      "valid_from": "2026-03-15",
+      "valid_until": null,
+      "confidence": 0.8,
+      "entity": {
+        "entity_id": "GOLD-M202",
+        "entity_type": "precious_metal",
+        "name": "Kamala's gold jewellery"
+      },
+      "attributes": {
+        "weight_grams": "150"
+      },
+      "as_of": "2026-03-15"
+    },
+    {
+      "record_id": "R212",
+      "member_id": "M202",
+      "type": "investment",
+      "category": "post_office_mis",
+      "description": "Post Office MIS deposit",
+      "amount": "900000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D209",
+        "filename": "kamala_pomis_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2024-02-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-POMIS-M202",
+        "entity_type": "deposit",
+        "name": "Post Office Monthly Income Scheme",
+        "institution": "India Post"
+      },
+      "attributes": {
+        "interest_rate_pct": "7.4"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R213",
+      "member_id": "M202",
+      "type": "income",
+      "category": "interest_income",
+      "description": "POMIS monthly payout",
+      "amount": "5550",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D209",
+        "filename": "kamala_pomis_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2024-03-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-POMIS-M202",
+        "entity_type": "deposit",
+        "name": "Post Office Monthly Income Scheme",
+        "institution": "India Post"
+      }
+    },
+    {
+      "record_id": "R214",
+      "member_id": "M203",
+      "type": "income",
+      "category": "salary",
+      "description": "Monthly salary — Kaveri Bank",
+      "amount": "380000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D210",
+        "filename": "suresh_payslip_mar2026.pdf",
+        "document_type": "payslip"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "EMP-KAVERI",
+        "entity_type": "employer",
+        "name": "Kaveri Bank Ltd"
+      },
+      "attributes": {
+        "gross_or_net": "net"
+      }
+    },
+    {
+      "record_id": "R215",
+      "member_id": "M203",
+      "type": "income",
+      "category": "salary",
+      "description": "Monthly salary — Kaveri Bank (promotion to VP)",
+      "amount": "420000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D211",
+        "filename": "suresh_payslip_oct2026.pdf",
+        "document_type": "payslip"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "EMP-KAVERI",
+        "entity_type": "employer",
+        "name": "Kaveri Bank Ltd"
+      },
+      "attributes": {
+        "gross_or_net": "net"
+      }
+    },
+    {
+      "record_id": "R216",
+      "member_id": "M203",
+      "type": "investment",
+      "category": "epf",
+      "description": "Employees' Provident Fund",
+      "amount": "3800000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D212",
+        "filename": "suresh_epf_passbook.pdf",
+        "document_type": "epf_passbook"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "RET-EPF-M203",
+        "entity_type": "retirement_account",
+        "name": "Suresh — EPF (UAN ••7710)"
+      },
+      "attributes": {
+        "liquidity": "locked"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R217",
+      "member_id": "M203",
+      "type": "investment",
+      "category": "nps",
+      "description": "National Pension System (Tier I)",
+      "amount": "1400000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D213",
+        "filename": "suresh_nps_statement.pdf",
+        "document_type": "nps_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "RET-NPS-M203",
+        "entity_type": "retirement_account",
+        "name": "Suresh — NPS Tier I"
+      },
+      "attributes": {
+        "liquidity": "locked",
+        "lock_in_until": "2040-09-12"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R218",
+      "member_id": "M203",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "3900000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D214",
+        "filename": "suresh_cas_jun2026.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-06-30",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-CAS-M203",
+        "entity_type": "investment_portfolio",
+        "name": "Suresh — MF portfolio (CAS)"
+      },
+      "as_of": "2026-06-30"
+    },
+    {
+      "record_id": "R219",
+      "member_id": "M203",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "4200000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D215",
+        "filename": "suresh_cas_oct2026.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-CAS-M203",
+        "entity_type": "investment_portfolio",
+        "name": "Suresh — MF portfolio (CAS)"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R220",
+      "member_id": "M203",
+      "type": "investment",
+      "category": "esop",
+      "description": "Employer ESOPs (unvested portion excluded)",
+      "amount": "1600000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D216",
+        "filename": "suresh_esop_grant_letter.pdf",
+        "document_type": "esop_statement"
+      },
+      "valid_from": "2026-06-30",
+      "valid_until": null,
+      "confidence": 0.85,
+      "entity": {
+        "entity_id": "INV-ESOP-M203",
+        "entity_type": "investment_portfolio",
+        "name": "Suresh — Kaveri Bank ESOPs"
+      },
+      "attributes": {
+        "liquidity": "locked",
+        "next_vesting": "2027-06-30"
+      },
+      "as_of": "2026-06-30"
+    },
+    {
+      "record_id": "R221",
+      "member_id": "M203",
+      "type": "asset",
+      "category": "residential_property",
+      "description": "Whitefield flat, Bengaluru (let out)",
+      "amount": "16500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D217",
+        "filename": "whitefield_sale_deed.pdf",
+        "document_type": "property_document"
+      },
+      "valid_from": "2019-08-20",
+      "valid_until": null,
+      "confidence": 0.8,
+      "co_owner_ids": [
+        "M204"
+      ],
+      "entity": {
+        "entity_id": "PROP-WHITEFIELD",
+        "entity_type": "property",
+        "name": "Whitefield flat, Bengaluru (let out)"
+      },
+      "attributes": {
+        "self_occupied": "false"
+      },
+      "as_of": "2026-04-01"
+    },
+    {
+      "record_id": "R222",
+      "member_id": "M203",
+      "type": "loan",
+      "category": "home_loan",
+      "description": "ICICI home loan — Whitefield flat",
+      "amount": "6200000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D218",
+        "filename": "icici_home_loan_statement_oct2026.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M204"
+      ],
+      "entity": {
+        "entity_id": "LOAN-ICICI-HL-M203",
+        "entity_type": "loan_account",
+        "name": "ICICI Home Loan ••3302",
+        "institution": "ICICI Bank"
+      },
+      "attributes": {
+        "emi": "78000",
+        "interest_rate_pct": "8.6",
+        "remaining_tenure_months": "132",
+        "secured_against_entity_id": "PROP-WHITEFIELD"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R223",
+      "member_id": "M203",
+      "type": "income",
+      "category": "rental_income",
+      "description": "Rent from Whitefield flat",
+      "amount": "45000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D219",
+        "filename": "whitefield_rent_agreement_2026.pdf",
+        "document_type": "rent_agreement"
+      },
+      "valid_from": "2026-02-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M204"
+      ],
+      "entity": {
+        "entity_id": "PROP-WHITEFIELD",
+        "entity_type": "property",
+        "name": "Whitefield flat, Bengaluru (let out)"
+      }
+    },
+    {
+      "record_id": "R224",
+      "member_id": "M203",
+      "type": "asset",
+      "category": "vehicle",
+      "description": "Toyota Innova Hycross (2024)",
+      "amount": "1100000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D220",
+        "filename": "innova_rc_and_insurance.pdf",
+        "document_type": "vehicle_document"
+      },
+      "valid_from": "2024-03-10",
+      "valid_until": null,
+      "confidence": 0.8,
+      "entity": {
+        "entity_id": "VEH-M203",
+        "entity_type": "vehicle",
+        "name": "Toyota Innova Hycross"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R225",
+      "member_id": "M203",
+      "type": "loan",
+      "category": "car_loan",
+      "description": "Car loan — Innova",
+      "amount": "650000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D221",
+        "filename": "car_loan_statement_oct2026.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-CAR-M203",
+        "entity_type": "loan_account",
+        "name": "Kaveri Bank Car Loan ••5521",
+        "institution": "Kaveri Bank"
+      },
+      "attributes": {
+        "emi": "21000",
+        "interest_rate_pct": "9.1",
+        "remaining_tenure_months": "34",
+        "secured_against_entity_id": "VEH-M203"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R226",
+      "member_id": "M203",
+      "type": "insurance",
+      "category": "term_life",
+      "description": "Term life cover",
+      "amount": "20000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D222",
+        "filename": "suresh_term_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2021-09-12",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-TERM-M203",
+        "entity_type": "insurance_policy",
+        "name": "Term policy ••8840",
+        "institution": "Max Life"
+      },
+      "attributes": {
+        "premium": "32000",
+        "premium_frequency": "annual",
+        "nominee_member_id": "M204",
+        "cover_until": "2045-09-12"
+      }
+    },
+    {
+      "record_id": "R227",
+      "member_id": "M203",
+      "type": "insurance",
+      "category": "health_family_floater",
+      "description": "Family floater health cover",
+      "amount": "2500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D223",
+        "filename": "family_floater_schedule.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-06-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-FLOATER-M203",
+        "entity_type": "insurance_policy",
+        "name": "Family floater ••1290",
+        "institution": "Niva Bupa"
+      },
+      "attributes": {
+        "premium": "48000",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M203,M204,M205,M206",
+        "cover_until": "2027-05-31"
+      }
+    },
+    {
+      "record_id": "R228",
+      "member_id": "M203",
+      "type": "liability",
+      "category": "credit_card",
+      "description": "Credit card outstanding (statement balance)",
+      "amount": "120000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D224",
+        "filename": "suresh_cc_statement_oct2026.pdf",
+        "document_type": "card_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "CC-M203",
+        "entity_type": "credit_card",
+        "name": "Credit card ••9012",
+        "institution": "Kaveri Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R229",
+      "member_id": "M203",
+      "type": "tax",
+      "category": "tds_on_salary",
+      "description": "TDS on salary, FY 2025-26 (AIS / Form 16)",
+      "amount": "1480000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D225",
+        "filename": "suresh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26"
+      }
+    },
+    {
+      "record_id": "R230",
+      "member_id": "M203",
+      "type": "tax",
+      "category": "itr_filed",
+      "description": "ITR-2 filed, FY 2025-26 — total tax paid",
+      "amount": "1720000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D226",
+        "filename": "suresh_ITR2_FY2025-26_ack.pdf",
+        "document_type": "itr_acknowledgement"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26",
+        "rental_income_declared": "480000"
+      }
+    },
+    {
+      "record_id": "R231",
+      "member_id": "M203",
+      "type": "tax",
+      "category": "ais_rental_receipts",
+      "description": "Rent received as reported in AIS (TDS by tenant u/s 194-IB)",
+      "amount": "540000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D225",
+        "filename": "suresh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26",
+        "mismatch_vs_itr": "60000"
+      }
+    },
+    {
+      "record_id": "R232",
+      "member_id": "M203",
+      "type": "transaction",
+      "category": "sft_mutual_fund_purchase",
+      "description": "High-value MF purchase reported in AIS (SFT-018)",
+      "amount": "600000",
+      "currency": "INR",
+      "frequency": "one_time",
+      "source": {
+        "document_id": "D225",
+        "filename": "suresh_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-12-15",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-CAS-M203",
+        "entity_type": "investment_portfolio",
+        "name": "Suresh — MF portfolio (CAS)"
+      }
+    },
+    {
+      "record_id": "R233",
+      "member_id": "M203",
+      "type": "expense",
+      "category": "household",
+      "description": "Household running costs, Mylapore (joint family)",
+      "amount": "180000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D227",
+        "filename": "suresh_kaveri_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "co_owner_ids": [
+        "M201"
+      ]
+    },
+    {
+      "record_id": "R234",
+      "member_id": "M203",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "Kaveri Bank salary account",
+      "amount": "1250000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D227",
+        "filename": "suresh_kaveri_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-KAVERI-M203",
+        "entity_type": "bank_account",
+        "name": "Kaveri Bank Savings ••6634",
+        "institution": "Kaveri Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R235",
+      "member_id": "M204",
+      "type": "income",
+      "category": "professional_fees",
+      "description": "Clinic receipts (net of GST)",
+      "amount": "210000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D228",
+        "filename": "meera_clinic_pnl_FY2025-26.pdf",
+        "document_type": "profit_and_loss"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.88,
+      "entity": {
+        "entity_id": "BIZ-CLINIC-M204",
+        "entity_type": "business",
+        "name": "Meera's Paediatric Clinic"
+      }
+    },
+    {
+      "record_id": "R236",
+      "member_id": "M204",
+      "type": "income",
+      "category": "professional_fees",
+      "description": "Clinic receipts after expansion (net of GST)",
+      "amount": "260000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D229",
+        "filename": "meera_clinic_bank_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.86,
+      "entity": {
+        "entity_id": "BIZ-CLINIC-M204",
+        "entity_type": "business",
+        "name": "Meera's Paediatric Clinic"
+      }
+    },
+    {
+      "record_id": "R237",
+      "member_id": "M204",
+      "type": "loan",
+      "category": "business_loan",
+      "description": "Equipment loan — clinic ultrasound & ICU cots",
+      "amount": "1800000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D230",
+        "filename": "meera_equipment_loan_sanction.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-BIZ-M204",
+        "entity_type": "loan_account",
+        "name": "SIDBI equipment loan ••0417",
+        "institution": "SIDBI"
+      },
+      "attributes": {
+        "emi": "42000",
+        "interest_rate_pct": "10.5",
+        "remaining_tenure_months": "48",
+        "secured_against_entity_id": "BIZ-CLINIC-M204"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R238",
+      "member_id": "M204",
+      "type": "investment",
+      "category": "ppf",
+      "description": "Public Provident Fund",
+      "amount": "2100000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D231",
+        "filename": "meera_ppf_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-03-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "RET-PPF-M204",
+        "entity_type": "retirement_account",
+        "name": "Meera — PPF"
+      },
+      "attributes": {
+        "liquidity": "locked",
+        "lock_in_until": "2031-03-31"
+      },
+      "as_of": "2026-03-31"
+    },
+    {
+      "record_id": "R239",
+      "member_id": "M204",
+      "type": "investment",
+      "category": "sovereign_gold_bonds",
+      "description": "Sovereign Gold Bonds (exchange-tradable)",
+      "amount": "600000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D232",
+        "filename": "meera_demat_holdings_oct2026.pdf",
+        "document_type": "demat_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-SGB-M204",
+        "entity_type": "investment_portfolio",
+        "name": "Meera — SGB holdings"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R240",
+      "member_id": "M204",
+      "type": "investment",
+      "category": "fixed_deposit",
+      "description": "Personal fixed deposit",
+      "amount": "800000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D233",
+        "filename": "meera_fd_receipt.pdf",
+        "document_type": "fd_receipt"
+      },
+      "valid_from": "2026-07-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-M204",
+        "entity_type": "deposit",
+        "name": "Meera — personal FD"
+      },
+      "as_of": "2026-07-01"
+    },
+    {
+      "record_id": "R241",
+      "member_id": "M204",
+      "type": "insurance",
+      "category": "professional_indemnity",
+      "description": "Professional indemnity cover",
+      "amount": "10000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D234",
+        "filename": "meera_indemnity_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-PI-M204",
+        "entity_type": "insurance_policy",
+        "name": "Doctors' indemnity policy ••7731",
+        "institution": "New India Assurance"
+      },
+      "attributes": {
+        "premium": "15000",
+        "premium_frequency": "annual"
+      }
+    },
+    {
+      "record_id": "R242",
+      "member_id": "M204",
+      "type": "tax",
+      "category": "tds_on_professional_fees",
+      "description": "TDS u/s 194J on hospital consulting fees (AIS)",
+      "amount": "312000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D235",
+        "filename": "meera_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26"
+      }
+    },
+    {
+      "record_id": "R243",
+      "member_id": "M204",
+      "type": "expense",
+      "category": "business_operating",
+      "description": "Clinic rent, nurse & receptionist salaries",
+      "amount": "55000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D229",
+        "filename": "meera_clinic_bank_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "entity": {
+        "entity_id": "BIZ-CLINIC-M204",
+        "entity_type": "business",
+        "name": "Meera's Paediatric Clinic"
+      }
+    },
+    {
+      "record_id": "R244",
+      "member_id": "M205",
+      "type": "loan",
+      "category": "education_loan",
+      "description": "Education loan — University of Toronto (in moratorium)",
+      "amount": "3500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D236",
+        "filename": "ananya_education_loan_sanction.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2025-08-20",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M203"
+      ],
+      "entity": {
+        "entity_id": "LOAN-EDU-M205",
+        "entity_type": "loan_account",
+        "name": "Education loan ••6012",
+        "institution": "Kaveri Bank"
+      },
+      "attributes": {
+        "emi": "0",
+        "emi_after_moratorium": "46000",
+        "moratorium_until": "2029-12-31",
+        "interest_rate_pct": "9.5"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R245",
+      "member_id": "M205",
+      "type": "expense",
+      "category": "education",
+      "description": "Tuition & living costs, Toronto (paid from Suresh's account)",
+      "amount": "240000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D227",
+        "filename": "suresh_kaveri_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2025-09-01",
+      "valid_until": null,
+      "confidence": 0.9,
+      "co_owner_ids": [
+        "M203"
+      ],
+      "attributes": {
+        "paid_by_member_id": "M203"
+      }
+    },
+    {
+      "record_id": "R246",
+      "member_id": "M205",
+      "type": "income",
+      "category": "part_time_job",
+      "description": "Campus library job (Canada)",
+      "amount": "1400",
+      "currency": "CAD",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D237",
+        "filename": "ananya_td_bank_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-01-10",
+      "valid_until": null,
+      "confidence": 0.9,
+      "entity": {
+        "entity_id": "EMP-UOFT-LIB",
+        "entity_type": "employer",
+        "name": "University of Toronto Libraries"
+      }
+    },
+    {
+      "record_id": "R247",
+      "member_id": "M205",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "TD Bank chequing account (Canada)",
+      "amount": "3200",
+      "currency": "CAD",
+      "frequency": null,
+      "source": {
+        "document_id": "D237",
+        "filename": "ananya_td_bank_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-TD-M205",
+        "entity_type": "bank_account",
+        "name": "TD Chequing ••2290",
+        "institution": "TD Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R248",
+      "member_id": "M206",
+      "type": "expense",
+      "category": "school_fees",
+      "description": "School fees, Class 9",
+      "amount": "320000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D238",
+        "filename": "rohan_school_fee_receipt_2026-27.pdf",
+        "document_type": "fee_receipt"
+      },
+      "valid_from": "2026-06-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M204"
+      ]
+    },
+    {
+      "record_id": "R249",
+      "member_id": "M206",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Minor's MF folio (guardian: Suresh)",
+      "amount": "350000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D239",
+        "filename": "rohan_minor_folio_statement.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-MF-M206",
+        "entity_type": "investment_portfolio",
+        "name": "Rohan — minor MF folio"
+      },
+      "attributes": {
+        "guardian_member_id": "M203"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R250",
+      "member_id": "M207",
+      "type": "income",
+      "category": "founder_stipend",
+      "description": "Founder stipend — Kolam Labs",
+      "amount": "150000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D240",
+        "filename": "karthik_bank_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2025-01-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "entity": {
+        "entity_id": "BIZ-KOLAM-M207",
+        "entity_type": "business",
+        "name": "Kolam Labs Pvt Ltd (founder)"
+      }
+    },
+    {
+      "record_id": "R251",
+      "member_id": "M207",
+      "type": "investment",
+      "category": "startup_equity",
+      "description": "Founder equity in Kolam Labs — no current valuation",
+      "amount": null,
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D241",
+        "filename": "kolam_cap_table.pdf",
+        "document_type": "cap_table"
+      },
+      "valid_from": "2026-03-31",
+      "valid_until": null,
+      "confidence": 0.6,
+      "entity": {
+        "entity_id": "BIZ-KOLAM-M207",
+        "entity_type": "business",
+        "name": "Kolam Labs Pvt Ltd (founder)"
+      },
+      "attributes": {
+        "liquidity": "locked"
+      }
+    },
+    {
+      "record_id": "R252",
+      "member_id": "M207",
+      "type": "loan",
+      "category": "personal_loan",
+      "description": "Personal loan",
+      "amount": "900000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D242",
+        "filename": "karthik_pl_statement.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-PL-M207",
+        "entity_type": "loan_account",
+        "name": "Personal loan ••4410",
+        "institution": "Bajaj Finance"
+      },
+      "attributes": {
+        "emi": "24000",
+        "interest_rate_pct": "13.5",
+        "remaining_tenure_months": "44"
+      },
+      "as_of": "2026-10-31"
+    }
+  ]
+}

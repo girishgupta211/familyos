@@ -1,0 +1,671 @@
+{
+  "schema_version": "1.0",
+  "family_id": "F003",
+  "generated_at": "2026-11-21T18:00:00Z",
+  "members": [
+    {
+      "member_id": "M301",
+      "name": "Farah Khan",
+      "relationship": "mother",
+      "date_of_birth": "1985-07-04"
+    },
+    {
+      "member_id": "M302",
+      "name": "Zubeida Khan",
+      "relationship": "grandmother",
+      "date_of_birth": "1960-02-11",
+      "other_relations": [
+        {
+          "type": "grandparent_of",
+          "member_id": "M303"
+        },
+        {
+          "type": "grandparent_of",
+          "member_id": "M304"
+        }
+      ]
+    },
+    {
+      "member_id": "M303",
+      "name": "Ayaan Khan",
+      "relationship": "son",
+      "date_of_birth": "2009-04-15",
+      "parent_ids": [
+        "M301"
+      ]
+    },
+    {
+      "member_id": "M304",
+      "name": "Sara Khan",
+      "relationship": "daughter",
+      "date_of_birth": "2015-09-23",
+      "parent_ids": [
+        "M301"
+      ]
+    }
+  ],
+  "financial_records": [
+    {
+      "record_id": "R301",
+      "member_id": "M301",
+      "type": "income",
+      "category": "business_income",
+      "description": "Boutique profit drawn (avg)",
+      "amount": "95000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D301",
+        "filename": "farah_boutique_pnl_FY2025-26.pdf",
+        "document_type": "profit_and_loss"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.8,
+      "entity": {
+        "entity_id": "BIZ-BOUTIQUE-M301",
+        "entity_type": "business",
+        "name": "Noor Boutique (proprietorship)"
+      },
+      "attributes": {
+        "income_volatility": "high"
+      }
+    },
+    {
+      "record_id": "R302",
+      "member_id": "M301",
+      "type": "income",
+      "category": "business_income",
+      "description": "Boutique profit drawn (avg, festive-season uplift)",
+      "amount": "110000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D302",
+        "filename": "farah_gstr3b_and_bank_apr-oct2026.pdf",
+        "document_type": "gst_return"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.78,
+      "entity": {
+        "entity_id": "BIZ-BOUTIQUE-M301",
+        "entity_type": "business",
+        "name": "Noor Boutique (proprietorship)"
+      },
+      "attributes": {
+        "income_volatility": "high",
+        "gst_turnover_annual": "2640000"
+      }
+    },
+    {
+      "record_id": "R303",
+      "member_id": "M301",
+      "type": "expense",
+      "category": "business_operating",
+      "description": "Boutique shop rent & 2 tailors",
+      "amount": "35000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D302",
+        "filename": "farah_gstr3b_and_bank_apr-oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "BIZ-BOUTIQUE-M301",
+        "entity_type": "business",
+        "name": "Noor Boutique (proprietorship)"
+      }
+    },
+    {
+      "record_id": "R304",
+      "member_id": "M301",
+      "type": "investment",
+      "category": "fixed_deposit",
+      "description": "FDs created from late husband's term-insurance claim",
+      "amount": "4500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D303",
+        "filename": "farah_canara_fd_receipts.pdf",
+        "document_type": "fd_receipt"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-M301",
+        "entity_type": "deposit",
+        "name": "FDs from insurance claim",
+        "institution": "Canara Bank"
+      },
+      "attributes": {
+        "interest_rate_pct": "7.0",
+        "purpose": "children's education"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R305",
+      "member_id": "M301",
+      "type": "transaction",
+      "category": "insurance_claim_credit",
+      "description": "Term-insurance death claim settled (late husband)",
+      "amount": "5000000",
+      "currency": "INR",
+      "frequency": "one_time",
+      "source": {
+        "document_id": "D304",
+        "filename": "claim_settlement_letter_2023.pdf",
+        "document_type": "insurance_claim"
+      },
+      "valid_from": "2023-08-14",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-CANARA-M301",
+        "entity_type": "bank_account",
+        "name": "Canara Savings ••7702",
+        "institution": "Canara Bank"
+      }
+    },
+    {
+      "record_id": "R306",
+      "member_id": "M301",
+      "type": "income",
+      "category": "interest_income",
+      "description": "FD interest (reported in AIS)",
+      "amount": "315000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D305",
+        "filename": "farah_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-M301",
+        "entity_type": "deposit",
+        "name": "FDs from insurance claim",
+        "institution": "Canara Bank"
+      }
+    },
+    {
+      "record_id": "R307",
+      "member_id": "M301",
+      "type": "loan",
+      "category": "home_loan",
+      "description": "Home loan — Tolichowki flat",
+      "amount": "2800000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D306",
+        "filename": "farah_home_loan_statement_oct2026.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-HL-M301",
+        "entity_type": "loan_account",
+        "name": "SBI Home Loan ••1185",
+        "institution": "State Bank of India"
+      },
+      "attributes": {
+        "emi": "31000",
+        "interest_rate_pct": "8.5",
+        "remaining_tenure_months": "140",
+        "secured_against_entity_id": "PROP-HYD-M301"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R308",
+      "member_id": "M301",
+      "type": "asset",
+      "category": "residential_property",
+      "description": "Flat in Tolichowki, Hyderabad (self-occupied)",
+      "amount": "7200000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D307",
+        "filename": "tolichowki_sale_deed.pdf",
+        "document_type": "property_document"
+      },
+      "valid_from": "2018-02-10",
+      "valid_until": null,
+      "confidence": 0.8,
+      "entity": {
+        "entity_id": "PROP-HYD-M301",
+        "entity_type": "property",
+        "name": "Flat in Tolichowki, Hyderabad"
+      },
+      "attributes": {
+        "self_occupied": "true"
+      },
+      "as_of": "2026-04-01"
+    },
+    {
+      "record_id": "R309",
+      "member_id": "M301",
+      "type": "loan",
+      "category": "gold_loan",
+      "description": "Gold loan (bullet repayment, interest paid monthly)",
+      "amount": "400000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D308",
+        "filename": "farah_gold_loan_receipt.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-03-10",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-GOLD-M301",
+        "entity_type": "loan_account",
+        "name": "Gold loan ••3390",
+        "institution": "Muthoot Finance"
+      },
+      "attributes": {
+        "emi": "3000",
+        "repayment": "bullet",
+        "principal_due": "2027-03-10",
+        "interest_rate_pct": "9.0",
+        "secured_against_entity_id": "GOLD-M301"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R310",
+      "member_id": "M301",
+      "type": "asset",
+      "category": "gold_jewellery",
+      "description": "Gold jewellery (pledged for gold loan)",
+      "amount": "900000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D308",
+        "filename": "farah_gold_loan_receipt.pdf",
+        "document_type": "valuation_report"
+      },
+      "valid_from": "2026-03-10",
+      "valid_until": null,
+      "confidence": 0.85,
+      "entity": {
+        "entity_id": "GOLD-M301",
+        "entity_type": "precious_metal",
+        "name": "Farah's gold jewellery"
+      },
+      "as_of": "2026-03-10"
+    },
+    {
+      "record_id": "R311",
+      "member_id": "M301",
+      "type": "insurance",
+      "category": "health_family_floater",
+      "description": "Family floater (Farah + children only)",
+      "amount": "1000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D309",
+        "filename": "farah_health_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-02-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-FLOATER-M301",
+        "entity_type": "insurance_policy",
+        "name": "Family floater ••5528",
+        "institution": "Care Health"
+      },
+      "attributes": {
+        "premium": "24000",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M301,M303,M304",
+        "cover_until": "2027-01-31"
+      }
+    },
+    {
+      "record_id": "R312",
+      "member_id": "M301",
+      "type": "insurance",
+      "category": "personal_accident",
+      "description": "Personal accident cover",
+      "amount": "2000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D310",
+        "filename": "farah_pa_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-05-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-PA-M301",
+        "entity_type": "insurance_policy",
+        "name": "Personal accident policy ••0081",
+        "institution": "Bajaj Allianz"
+      },
+      "attributes": {
+        "premium": "1800",
+        "premium_frequency": "annual"
+      }
+    },
+    {
+      "record_id": "R313",
+      "member_id": "M301",
+      "type": "expense",
+      "category": "household",
+      "description": "Household running costs",
+      "amount": "65000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D311",
+        "filename": "farah_canara_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-01-01",
+      "valid_until": null,
+      "confidence": 0.85
+    },
+    {
+      "record_id": "R314",
+      "member_id": "M303",
+      "type": "expense",
+      "category": "coaching",
+      "description": "JEE coaching (Class 12)",
+      "amount": "180000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D312",
+        "filename": "ayaan_coaching_fee_receipt.pdf",
+        "document_type": "fee_receipt"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M301"
+      ]
+    },
+    {
+      "record_id": "R315",
+      "member_id": "M304",
+      "type": "expense",
+      "category": "school_fees",
+      "description": "School fees, Class 6",
+      "amount": "140000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D313",
+        "filename": "sara_school_fee_receipt.pdf",
+        "document_type": "fee_receipt"
+      },
+      "valid_from": "2026-06-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M301"
+      ]
+    },
+    {
+      "record_id": "R316",
+      "member_id": "M301",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "Canara savings account",
+      "amount": "380000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D311",
+        "filename": "farah_canara_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-CANARA-M301",
+        "entity_type": "bank_account",
+        "name": "Canara Savings ••7702",
+        "institution": "Canara Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R317",
+      "member_id": "M301",
+      "type": "tax",
+      "category": "tds_on_interest",
+      "description": "TDS on FD interest, FY 2025-26 (AIS)",
+      "amount": "31500",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D305",
+        "filename": "farah_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26"
+      }
+    },
+    {
+      "record_id": "R318",
+      "member_id": "M301",
+      "type": "tax",
+      "category": "advance_tax_paid",
+      "description": "Advance tax paid, FY 2026-27 (Q1–Q2)",
+      "amount": "45000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D314",
+        "filename": "farah_challan_280.pdf",
+        "document_type": "tax_challan"
+      },
+      "valid_from": "2026-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2026-27"
+      }
+    },
+    {
+      "record_id": "R319",
+      "member_id": "M302",
+      "type": "income",
+      "category": "family_pension",
+      "description": "Family pension (late husband, Railways)",
+      "amount": "22000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D315",
+        "filename": "zubeida_pension_slip.pdf",
+        "document_type": "pension_slip"
+      },
+      "valid_from": "2012-05-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "PEN-RLY-M302",
+        "entity_type": "pension_source",
+        "name": "Railways family pension"
+      }
+    },
+    {
+      "record_id": "R320",
+      "member_id": "M302",
+      "type": "asset",
+      "category": "residential_property",
+      "description": "House in Aminabad, Lucknow (let out)",
+      "amount": "7500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D316",
+        "filename": "aminabad_property_papers.pdf",
+        "document_type": "property_document"
+      },
+      "valid_from": "1994-01-01",
+      "valid_until": null,
+      "confidence": 0.7,
+      "entity": {
+        "entity_id": "PROP-LKO-M302",
+        "entity_type": "property",
+        "name": "House in Aminabad, Lucknow (let out)"
+      },
+      "attributes": {
+        "self_occupied": "false"
+      },
+      "as_of": "2026-04-01"
+    },
+    {
+      "record_id": "R321",
+      "member_id": "M302",
+      "type": "income",
+      "category": "rental_income",
+      "description": "Rent from Lucknow house",
+      "amount": "18000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D317",
+        "filename": "aminabad_rent_agreement.pdf",
+        "document_type": "rent_agreement"
+      },
+      "valid_from": "2025-06-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "PROP-LKO-M302",
+        "entity_type": "property",
+        "name": "House in Aminabad, Lucknow (let out)"
+      }
+    },
+    {
+      "record_id": "R322",
+      "member_id": "M302",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "PNB savings account",
+      "amount": "260000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D318",
+        "filename": "zubeida_pnb_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-PNB-M302",
+        "entity_type": "bank_account",
+        "name": "PNB Savings ••4419",
+        "institution": "Punjab National Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R323",
+      "member_id": "M302",
+      "type": "expense",
+      "category": "medical",
+      "description": "Diabetes & BP medicines, check-ups (uninsured)",
+      "amount": "9000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D318",
+        "filename": "zubeida_pnb_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-01-01",
+      "valid_until": null,
+      "confidence": 0.8
+    },
+    {
+      "record_id": "R324",
+      "member_id": "M304",
+      "type": "investment",
+      "category": "sukanya_samriddhi",
+      "description": "Sukanya Samriddhi Account",
+      "amount": "420000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D319",
+        "filename": "sara_ssy_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-03-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "RET-SSY-M304",
+        "entity_type": "retirement_account",
+        "name": "Sara — Sukanya Samriddhi"
+      },
+      "attributes": {
+        "liquidity": "locked",
+        "lock_in_until": "2036-09-23",
+        "guardian_member_id": "M301"
+      },
+      "as_of": "2026-03-31"
+    },
+    {
+      "record_id": "R325",
+      "member_id": "M303",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "Minor savings account",
+      "amount": "35000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D320",
+        "filename": "ayaan_minor_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-MINOR-M303",
+        "entity_type": "bank_account",
+        "name": "Ayaan — minor account ••0912",
+        "institution": "Canara Bank"
+      },
+      "as_of": "2026-10-31"
+    }
+  ]
+}

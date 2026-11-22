@@ -1,0 +1,699 @@
+{
+  "schema_version": "1.0",
+  "family_id": "F004",
+  "generated_at": "2026-11-21T18:00:00Z",
+  "members": [
+    {
+      "member_id": "M401",
+      "name": "Neha Kapoor",
+      "relationship": "wife",
+      "date_of_birth": "1995-01-17",
+      "spouse_id": "M402"
+    },
+    {
+      "member_id": "M402",
+      "name": "Vikram Reddy",
+      "relationship": "husband",
+      "date_of_birth": "1993-06-30",
+      "spouse_id": "M401",
+      "parent_ids": [
+        "M404"
+      ]
+    },
+    {
+      "member_id": "M403",
+      "name": "Kabir Reddy",
+      "relationship": "son",
+      "date_of_birth": "2026-08-10",
+      "parent_ids": [
+        "M401",
+        "M402"
+      ]
+    },
+    {
+      "member_id": "M404",
+      "name": "Lakshmi Reddy",
+      "relationship": "mother_in_law",
+      "date_of_birth": "1965-12-02"
+    }
+  ],
+  "financial_records": [
+    {
+      "record_id": "R401",
+      "member_id": "M401",
+      "type": "income",
+      "category": "salary",
+      "description": "Monthly salary — Orbital Commerce (on paid maternity leave to Feb 2027)",
+      "amount": "290000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D401",
+        "filename": "neha_payslip_oct2026.pdf",
+        "document_type": "payslip"
+      },
+      "valid_from": "2025-07-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "EMP-ORBITAL",
+        "entity_type": "employer",
+        "name": "Orbital Commerce Pvt Ltd"
+      },
+      "attributes": {
+        "gross_or_net": "net",
+        "maternity_leave_until": "2027-02-09"
+      }
+    },
+    {
+      "record_id": "R402",
+      "member_id": "M401",
+      "type": "investment",
+      "category": "us_equity_rsu",
+      "description": "Vested RSUs (NASDAQ-listed parent)",
+      "amount": "26500",
+      "currency": "USD",
+      "frequency": null,
+      "source": {
+        "document_id": "D402",
+        "filename": "neha_us_broker_statement_oct2026.pdf",
+        "document_type": "brokerage_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-RSU-M401",
+        "entity_type": "investment_portfolio",
+        "name": "Neha — vested RSUs (US broker)"
+      },
+      "attributes": {
+        "next_vesting": "2027-02-15"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R403",
+      "member_id": "M401",
+      "type": "investment",
+      "category": "epf",
+      "description": "Employees' Provident Fund",
+      "amount": "900000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D403",
+        "filename": "neha_epf_passbook.pdf",
+        "document_type": "epf_passbook"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "RET-EPF-M401",
+        "entity_type": "retirement_account",
+        "name": "Neha — EPF"
+      },
+      "attributes": {
+        "liquidity": "locked"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R404",
+      "member_id": "M401",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "1150000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D404",
+        "filename": "neha_cas_oct2026.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-CAS-M401",
+        "entity_type": "investment_portfolio",
+        "name": "Neha — MF portfolio (CAS)"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R405",
+      "member_id": "M401",
+      "type": "tax",
+      "category": "tds_on_salary",
+      "description": "TDS on salary, FY 2025-26 (AIS)",
+      "amount": "820000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D405",
+        "filename": "neha_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": "2026-03-31",
+      "confidence": 0.97,
+      "attributes": {
+        "financial_year": "2025-26",
+        "schedule_fa_required": "true"
+      }
+    },
+    {
+      "record_id": "R406",
+      "member_id": "M401",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "HDFC salary account",
+      "amount": "1450000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D406",
+        "filename": "neha_hdfc_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-HDFC-M401",
+        "entity_type": "bank_account",
+        "name": "HDFC Savings ••3318",
+        "institution": "HDFC Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R407",
+      "member_id": "M402",
+      "type": "income",
+      "category": "salary",
+      "description": "Monthly salary — Paygrid Technologies",
+      "amount": "240000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D407",
+        "filename": "vikram_payslip_aug2026_paygrid.pdf",
+        "document_type": "payslip"
+      },
+      "valid_from": "2024-10-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "EMP-PAYGRID",
+        "entity_type": "employer",
+        "name": "Paygrid Technologies"
+      },
+      "attributes": {
+        "gross_or_net": "net"
+      }
+    },
+    {
+      "record_id": "R408",
+      "member_id": "M402",
+      "type": "income",
+      "category": "salary",
+      "description": "Monthly salary — Lumen Fintech (new job)",
+      "amount": "310000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D408",
+        "filename": "vikram_offer_and_payslip_oct2026_lumen.pdf",
+        "document_type": "payslip"
+      },
+      "valid_from": "2026-09-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "EMP-LUMEN",
+        "entity_type": "employer",
+        "name": "Lumen Fintech Pvt Ltd"
+      },
+      "attributes": {
+        "gross_or_net": "net"
+      }
+    },
+    {
+      "record_id": "R409",
+      "member_id": "M402",
+      "type": "investment",
+      "category": "crypto",
+      "description": "Crypto holdings (exchange wallet)",
+      "amount": "300000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D409",
+        "filename": "vikram_exchange_statement.pdf",
+        "document_type": "exchange_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.9,
+      "entity": {
+        "entity_id": "INV-CRYPTO-M402",
+        "entity_type": "investment_portfolio",
+        "name": "Vikram — crypto wallet"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R410",
+      "member_id": "M402",
+      "type": "loan",
+      "category": "personal_loan",
+      "description": "Personal loan taken for the wedding",
+      "amount": "600000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D410",
+        "filename": "vikram_pl_statement_oct2026.pdf",
+        "document_type": "loan_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "LOAN-PL-M402",
+        "entity_type": "loan_account",
+        "name": "Personal loan ••2201",
+        "institution": "Axis Bank"
+      },
+      "attributes": {
+        "emi": "19500",
+        "interest_rate_pct": "12.5",
+        "remaining_tenure_months": "30"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R411",
+      "member_id": "M402",
+      "type": "liability",
+      "category": "credit_card",
+      "description": "Credit card outstanding (statement balance)",
+      "amount": "85000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D411",
+        "filename": "vikram_cc_statement_oct2026.pdf",
+        "document_type": "card_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "CC-M402",
+        "entity_type": "credit_card",
+        "name": "Credit card ••7765",
+        "institution": "Axis Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R412",
+      "member_id": "M402",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "640000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D412",
+        "filename": "vikram_cas_oct2026.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-CAS-M402",
+        "entity_type": "investment_portfolio",
+        "name": "Vikram — MF portfolio (CAS)"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R413",
+      "member_id": "M402",
+      "type": "insurance",
+      "category": "term_life",
+      "description": "Term life cover",
+      "amount": "15000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D413",
+        "filename": "vikram_term_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2025-03-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-TERM-M402",
+        "entity_type": "insurance_policy",
+        "name": "Term policy ••4410",
+        "institution": "HDFC Life"
+      },
+      "attributes": {
+        "premium": "21000",
+        "premium_frequency": "annual",
+        "nominee_member_id": "M401",
+        "cover_until": "2053-06-30"
+      }
+    },
+    {
+      "record_id": "R414",
+      "member_id": "M402",
+      "type": "insurance",
+      "category": "group_health",
+      "description": "Employer group health cover — Paygrid",
+      "amount": "500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D414",
+        "filename": "paygrid_group_health_ecard.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2024-10-01",
+      "valid_until": "2026-08-31",
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-GRP-PAYGRID",
+        "entity_type": "insurance_policy",
+        "name": "Paygrid group health"
+      },
+      "attributes": {
+        "premium": "0",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M402,M401",
+        "employer_provided": "true"
+      }
+    },
+    {
+      "record_id": "R415",
+      "member_id": "M402",
+      "type": "insurance",
+      "category": "group_health",
+      "description": "Employer group health cover — Lumen (incl. newborn)",
+      "amount": "1000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D415",
+        "filename": "lumen_group_health_ecard.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2026-09-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-GRP-LUMEN",
+        "entity_type": "insurance_policy",
+        "name": "Lumen group health"
+      },
+      "attributes": {
+        "premium": "0",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M402,M401,M403",
+        "employer_provided": "true"
+      }
+    },
+    {
+      "record_id": "R416",
+      "member_id": "M402",
+      "type": "expense",
+      "category": "parent_support",
+      "description": "Monthly support to mother (medicines & help)",
+      "amount": "12000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D416",
+        "filename": "vikram_icici_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2025-01-01",
+      "valid_until": null,
+      "confidence": 0.88,
+      "attributes": {
+        "beneficiary_member_id": "M404"
+      }
+    },
+    {
+      "record_id": "R417",
+      "member_id": "M402",
+      "type": "expense",
+      "category": "rent",
+      "description": "Rent, HSR Layout flat",
+      "amount": "55000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D417",
+        "filename": "hsr_rent_agreement_2026.pdf",
+        "document_type": "rent_agreement"
+      },
+      "valid_from": "2026-03-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "co_owner_ids": [
+        "M401"
+      ]
+    },
+    {
+      "record_id": "R418",
+      "member_id": "M401",
+      "type": "expense",
+      "category": "household",
+      "description": "Household running costs",
+      "amount": "70000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D406",
+        "filename": "neha_hdfc_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-01-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "co_owner_ids": [
+        "M402"
+      ]
+    },
+    {
+      "record_id": "R419",
+      "member_id": "M403",
+      "type": "expense",
+      "category": "childcare",
+      "description": "Nanny & paediatric visits for Kabir",
+      "amount": "35000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D406",
+        "filename": "neha_hdfc_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-09-01",
+      "valid_until": null,
+      "confidence": 0.85,
+      "co_owner_ids": [
+        "M401",
+        "M402"
+      ]
+    },
+    {
+      "record_id": "R420",
+      "member_id": "M402",
+      "type": "bank_balance",
+      "category": "savings_account",
+      "description": "ICICI salary account",
+      "amount": "380000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D416",
+        "filename": "vikram_icici_statement_oct2026.pdf",
+        "document_type": "bank_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "ACC-ICICI-M402",
+        "entity_type": "bank_account",
+        "name": "ICICI Savings ••5130",
+        "institution": "ICICI Bank"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R421",
+      "member_id": "M403",
+      "type": "investment",
+      "category": "mutual_funds",
+      "description": "Kabir's first SIP (minor folio)",
+      "amount": "50000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D418",
+        "filename": "kabir_minor_folio.pdf",
+        "document_type": "cas_statement"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "INV-MF-M403",
+        "entity_type": "investment_portfolio",
+        "name": "Kabir — minor MF folio"
+      },
+      "attributes": {
+        "guardian_member_id": "M401"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R422",
+      "member_id": "M404",
+      "type": "asset",
+      "category": "residential_property",
+      "description": "Flat in Kukatpally, Hyderabad (self-occupied)",
+      "amount": "6000000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D419",
+        "filename": "kukatpally_sale_deed.pdf",
+        "document_type": "property_document"
+      },
+      "valid_from": "2004-06-15",
+      "valid_until": null,
+      "confidence": 0.75,
+      "entity": {
+        "entity_id": "PROP-KUKATPALLY",
+        "entity_type": "property",
+        "name": "Kukatpally flat, Hyderabad"
+      },
+      "attributes": {
+        "self_occupied": "true"
+      },
+      "as_of": "2026-04-01"
+    },
+    {
+      "record_id": "R423",
+      "member_id": "M404",
+      "type": "insurance",
+      "category": "health_individual",
+      "description": "Individual health policy (premium paid by Vikram)",
+      "amount": "500000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D420",
+        "filename": "lakshmi_health_policy.pdf",
+        "document_type": "insurance_policy"
+      },
+      "valid_from": "2024-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "POL-HEALTH-M404",
+        "entity_type": "insurance_policy",
+        "name": "Health policy ••6620",
+        "institution": "Star Health"
+      },
+      "attributes": {
+        "premium": "28000",
+        "premium_frequency": "annual",
+        "insured_member_ids": "M404",
+        "paid_by_member_id": "M402",
+        "pre_existing_waiting_until": "2027-04-01"
+      }
+    },
+    {
+      "record_id": "R424",
+      "member_id": "M404",
+      "type": "investment",
+      "category": "fixed_deposit",
+      "description": "Bank FD",
+      "amount": "700000",
+      "currency": "INR",
+      "frequency": null,
+      "source": {
+        "document_id": "D421",
+        "filename": "lakshmi_fd_receipt.pdf",
+        "document_type": "fd_receipt"
+      },
+      "valid_from": "2026-10-31",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-M404",
+        "entity_type": "deposit",
+        "name": "Lakshmi — SBI FD",
+        "institution": "State Bank of India"
+      },
+      "as_of": "2026-10-31"
+    },
+    {
+      "record_id": "R425",
+      "member_id": "M404",
+      "type": "income",
+      "category": "interest_income",
+      "description": "FD interest (AIS)",
+      "amount": "49000",
+      "currency": "INR",
+      "frequency": "annual",
+      "source": {
+        "document_id": "D422",
+        "filename": "lakshmi_AIS_FY2025-26.pdf",
+        "document_type": "ais"
+      },
+      "valid_from": "2025-04-01",
+      "valid_until": null,
+      "confidence": 0.97,
+      "entity": {
+        "entity_id": "DEP-FD-M404",
+        "entity_type": "deposit",
+        "name": "Lakshmi — SBI FD",
+        "institution": "State Bank of India"
+      }
+    },
+    {
+      "record_id": "R426",
+      "member_id": "M404",
+      "type": "expense",
+      "category": "medical",
+      "description": "Knee pain treatment & physiotherapy",
+      "amount": "6000",
+      "currency": "INR",
+      "frequency": "monthly",
+      "source": {
+        "document_id": "D423",
+        "filename": "lakshmi_sbi_passbook.pdf",
+        "document_type": "passbook"
+      },
+      "valid_from": "2026-06-01",
+      "valid_until": null,
+      "confidence": 0.8
+    }
+  ]
+}

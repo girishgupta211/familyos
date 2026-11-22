@@ -1,0 +1,51 @@
+[
+  {
+    "family_id": "F001",
+    "name": "Mehta family",
+    "city": "Pune",
+    "default_member_id": "M003",
+    "summary": "Three earners, one home loan, father close to retirement. The golden sample for Contract A.",
+    "questions": [
+      "Can our family afford to buy a ₹1.5 crore house next year?",
+      "What happens if father retires next year?",
+      "Which family member contributes the most to our current household income?"
+    ]
+  },
+  {
+    "family_id": "F002",
+    "name": "Iyer joint family",
+    "city": "Chennai",
+    "default_member_id": "M203",
+    "summary": "Three generations, seven members: pensions, a let-out flat, a daughter studying in Toronto and an uncle who keeps his finances private.",
+    "questions": [
+      "If Appa needs a ₹15 lakh heart surgery, how should we pay for it?",
+      "Can we fund Rohan's engineering abroad in 4 years while Ananya's education loan is still running?",
+      "Who in our family is under-insured?",
+      "Does anything in our AIS look inconsistent with what we filed?"
+    ]
+  },
+  {
+    "family_id": "F003",
+    "name": "Khan family",
+    "city": "Hyderabad",
+    "default_member_id": "M301",
+    "summary": "A single parent running a boutique, supporting her mother-in-law and two school-going children.",
+    "questions": [
+      "Can I afford Ayaan's engineering college fees of ₹18 lakh over 4 years?",
+      "Am I adequately insured as the only earning parent?",
+      "What happens if boutique income drops by 30%?"
+    ]
+  },
+  {
+    "family_id": "F004",
+    "name": "Kapoor–Reddy household",
+    "city": "Bengaluru",
+    "default_member_id": "M401",
+    "summary": "A young two-income couple with a newborn, a recent job change and a dependent mother in another city.",
+    "questions": [
+      "Should we buy a ₹1.2 crore flat in 2 years or keep renting?",
+      "How have our finances changed since Kabir was born and Vikram switched jobs?",
+      "Can we support Vikram's mother's ₹4 lakh knee surgery?"
+    ]
+  }
+]

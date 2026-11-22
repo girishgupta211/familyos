@@ -1,0 +1,1140 @@
+<title>FamilyOS Data Contract</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single-column API spec, 760px reading measure, wide tables and code scroll inside their own frames */
+:root {
+  --bg: #f6f8f7;
+  --surface: #ffffff;
+  --sunk: #eef2f0;
+  --fg: #16211d;
+  --muted: #5b6b64;
+  --line: #d9e2de;
+  --accent: #0f7a5a;
+  --accent-soft: #e2f3ec;
+  --warn: #9a5b00;
+  --warn-soft: #fdf1dc;
+  --bad: #b3261e;
+  --code-bg: #10201a;
+  --code-fg: #d8eee4;
+  --code-key: #7fd8b0;
+  --code-str: #f3c98b;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1311; --surface: #121c19; --sunk: #17231f; --fg: #e3ece8; --muted: #93a59d; --line: #24342e;
+    --accent: #4fd1a0; --accent-soft: #143328; --warn: #f0b252; --warn-soft: #2d2412; --bad: #f2827b;
+    --code-bg: #08100d; --code-fg: #d8eee4; --code-key: #7fd8b0; --code-str: #f3c98b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1311; --surface: #121c19; --sunk: #17231f; --fg: #e3ece8; --muted: #93a59d; --line: #24342e;
+  --accent: #4fd1a0; --accent-soft: #143328; --warn: #f0b252; --warn-soft: #2d2412; --bad: #f2827b;
+  --code-bg: #08100d; --code-fg: #d8eee4; --code-key: #7fd8b0; --code-str: #f3c98b;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 800px; margin: 0 auto; padding-block: 48px 80px; display: flex; flex-direction: column; gap: 44px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: 1.3rem; font-weight: 600; display: flex; align-items: baseline; gap: 10px; }
+h2 .sec { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+h3 { font-size: 1rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+section { display: flex; flex-direction: column; gap: 14px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+:not(pre) > code { background: var(--sunk); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 1.08rem; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--font-mono); font-size: 0.75rem; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+.chip.on { background: var(--accent-soft); color: var(--accent); border-color: transparent; font-weight: 600; }
+
+/* boundary diagram */
+.flow { display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: stretch; gap: 8px; }
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.node.you { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.node .who { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.node .what { font-weight: 600; margin-top: 2px; }
+.node .how { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+.node.contract { background: var(--accent-soft); border-color: transparent; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.node.contract .what { color: var(--accent); font-family: var(--font-mono); }
+.arrow { align-self: center; color: var(--muted); font-family: var(--font-mono); }
+@media (max-width: 640px) {
+  .flow { grid-template-columns: 1fr; }
+  .arrow { transform: rotate(90deg); justify-self: center; }
+}
+
+/* two delivery options */
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.opt { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.opt .tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; background: var(--sunk); white-space: nowrap; }
+td:first-child { font-family: var(--font-mono); font-size: 0.84rem; white-space: nowrap; font-weight: 500; }
+td.req { text-align: center; color: var(--accent); font-weight: 700; }
+td.opt-c { text-align: center; color: var(--muted); }
+td .ex { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+
+/* rules */
+.rules { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; counter-reset: r; }
+.rules li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; counter-increment: r; }
+.rules li::before { content: "R" counter(r); font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: var(--accent); padding-top: 2px; }
+.rules .bad { color: var(--bad); font-family: var(--font-mono); font-size: 0.8rem; }
+.rules .good { color: var(--accent); font-family: var(--font-mono); font-size: 0.8rem; }
+
+.callout { background: var(--warn-soft); border-left: 3px solid var(--warn); border-radius: 6px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+.callout h3 { color: var(--warn); }
+.callout ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+/* code */
+pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 10px; padding: 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.55; }
+pre .k { color: var(--code-key); }
+pre .s { color: var(--code-str); }
+.codebox { display: flex; flex-direction: column; gap: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.codebar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; background: var(--surface); padding: 6px; border-bottom: 1px solid var(--line); }
+.codebar button { font: 500 0.8rem var(--font-mono); background: transparent; color: var(--muted); border: 1px solid transparent; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+.codebar button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+.codebar button:focus-visible, .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.codebar .spacer { flex: 1; }
+.copy { font: 600 0.78rem var(--font-body); background: var(--accent); color: var(--surface); border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.codebox pre { border-radius: 0; max-height: 520px; }
+.codenote { font-size: 0.82rem; color: var(--muted); padding: 8px 12px; background: var(--surface); border-top: 1px solid var(--line); }
+
+.checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.checklist li { display: flex; gap: 10px; align-items: baseline; }
+.checklist li::before { content: "☐"; color: var(--accent); font-size: 1.05rem; }
+
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:14px">
+  <div class="eyebrow">FamilyOS · Buildathon integration spec</div>
+  <h1>FamilyOS Data Contract</h1>
+  <p class="lede">What the Financial Data Engine sends to the Family Context Engine. If your output validates against this contract, the context engine, agent and dashboard work with it unchanged. Nothing on the other side reads your database or depends on your internals.</p>
+  <div class="meta">
+    <span class="chip on">schema_version 1.0</span>
+    <span class="chip">Contract A</span>
+    <span class="chip">JSON · UTF-8</span>
+    <span class="chip">Synthetic data only</span>
+  </div>
+</header>
+
+<section>
+  <h2><span class="sec">01</span>Where this sits</h2>
+  <div class="flow">
+    <div class="node you"><div class="who">You · Builder A</div><div class="what">Financial Data Engine</div><div class="how">Upload, OCR, extraction, normalisation, validation</div></div>
+    <div class="arrow">→</div>
+    <div class="node contract"><div class="who">This document</div><div class="what">Contract A JSON</div><div class="how">members + financial_records</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="who">Builder B</div><div class="what">Family Context Engine</div><div class="how">Relationships, history, consent, LangGraph Q&amp;A</div></div>
+  </div>
+  <p>You are the source of truth for extracted facts. The context engine never edits your facts. It links them to people, works out which value is the latest, and reasons across family members.</p>
+</section>
+
+<section>
+  <h2><span class="sec">02</span>How to deliver data</h2>
+  <p>Pick one. All three carry the same records.</p>
+  <div class="opts">
+    <div class="opt">
+      <div class="tag">Option 1 · Pull</div>
+      <h3>You expose an endpoint</h3>
+      <p>Return the full family snapshot. We start the context engine with <code>FINANCIAL_ENGINE_URL</code> pointing at you.</p>
+      <pre>GET {FINANCIAL_ENGINE_URL}/families/{family_id}/financial-data
+→ 200, body = full Contract A payload</pre>
+    </div>
+    <div class="opt">
+      <div class="tag">Option 2 · Push</div>
+      <h3>You send new records to us</h3>
+      <p>Send records as each document finishes processing. The response tells you which older fact the new record replaced.</p>
+      <pre>POST http://&lt;context-engine-host&gt;:8000/api/family/F001/records
+{"schema_version":"1.0","family_id":"F001",
+ "financial_records":[ ... ]}
+→ 200 {accepted, memory_changes}
+→ 422 if a record_id already exists or a
+      member_id is unknown</pre>
+    </div>
+    <div class="opt">
+      <div class="tag">Option 3 · MCP</div>
+      <h3>You expose an MCP server</h3>
+      <p>We connect as an MCP client and call your tool for each family. Return a full Contract A payload, as structured output or JSON text. <code>list_families</code> is optional.</p>
+      <pre>tool get_family_financial_data(family_id: str)
+  → Contract A payload
+tool list_families()            (optional)
+  → [{"family_id": "F001", ...}]
+
+transport: streamable HTTP  (http://host:port/mcp)
+       or: stdio            (a command we can run)</pre>
+      <p>Other tool or argument names are fine; tell us what they are. If your output isn't in Contract A shape, we map it on our side.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec">03</span>Payload shape</h2>
+<pre>{
+  <span class="k">"schema_version"</span>: <span class="s">"1.0"</span>,
+  <span class="k">"family_id"</span>: <span class="s">"F001"</span>,
+  <span class="k">"members"</span>: [
+    { <span class="k">"member_id"</span>: <span class="s">"M001"</span>, <span class="k">"name"</span>: <span class="s">"Rajesh Mehta"</span>, <span class="k">"relationship"</span>: <span class="s">"father"</span>, <span class="k">"date_of_birth"</span>: <span class="s">"1967-03-14"</span> }
+  ],
+  <span class="k">"financial_records"</span>: [
+    {
+      <span class="k">"record_id"</span>: <span class="s">"R005"</span>, <span class="k">"member_id"</span>: <span class="s">"M001"</span>, <span class="k">"co_owner_ids"</span>: [<span class="s">"M002"</span>],
+      <span class="k">"type"</span>: <span class="s">"loan"</span>, <span class="k">"category"</span>: <span class="s">"home_loan"</span>,
+      <span class="k">"description"</span>: <span class="s">"SBI home loan — outstanding principal"</span>,
+      <span class="k">"amount"</span>: <span class="s">"3200000"</span>, <span class="k">"currency"</span>: <span class="s">"INR"</span>, <span class="k">"frequency"</span>: null,
+      <span class="k">"entity"</span>: { <span class="k">"entity_id"</span>: <span class="s">"LOAN-SBI-7781"</span>, <span class="k">"entity_type"</span>: <span class="s">"loan_account"</span>, <span class="k">"name"</span>: <span class="s">"SBI Home Loan ••7781"</span>, <span class="k">"institution"</span>: <span class="s">"State Bank of India"</span> },
+      <span class="k">"attributes"</span>: { <span class="k">"emi"</span>: <span class="s">"40000"</span>, <span class="k">"interest_rate_pct"</span>: <span class="s">"8.4"</span>, <span class="k">"remaining_tenure_months"</span>: <span class="s">"96"</span> },
+      <span class="k">"source"</span>: { <span class="k">"document_id"</span>: <span class="s">"D005"</span>, <span class="k">"filename"</span>: <span class="s">"sbi_home_loan_statement_oct2026.pdf"</span>, <span class="k">"document_type"</span>: <span class="s">"loan_statement"</span> },
+      <span class="k">"valid_from"</span>: <span class="s">"2026-10-31"</span>, <span class="k">"valid_until"</span>: null, <span class="k">"as_of"</span>: <span class="s">"2026-10-31"</span>,
+      <span class="k">"confidence"</span>: 0.96
+    }
+  ]
+}</pre>
+
+  <h3>Member fields</h3>
+  <div class="tbl"><table>
+    <tr><th>Field</th><th>Req.</th><th>Meaning</th></tr>
+    <tr><td>member_id</td><td class="req">✓</td><td>Stable ID. Never reuse or renumber. <span class="ex">M001</span></td></tr>
+    <tr><td>name</td><td class="req">✓</td><td>Display name.</td></tr>
+    <tr><td>relationship</td><td class="req">✓</td><td>Role in the family: <span class="ex">father · mother · son · daughter · spouse · self · grandfather · grandmother</span>. The context engine derives spouse_of and parent_of links from these values.</td></tr>
+    <tr><td>date_of_birth</td><td class="opt-c">–</td><td>ISO date. Used for life-stage reasoning, such as retirement horizon.</td></tr>
+    <tr><td>spouse_id</td><td class="opt-c">–</td><td>The <code>member_id</code> of their spouse.</td></tr>
+    <tr><td>parent_ids</td><td class="opt-c">–</td><td>The <code>member_id</code>s of their parents. Use these whenever a role word like <span class="ex">daughter_in_law</span> isn't enough to place someone. We derive siblings and grandparents ourselves.</td></tr>
+    <tr><td>other_relations</td><td class="opt-c">–</td><td>Any other link: <span class="ex">[{"type": "grandparent_of", "member_id": "M304"}]</span></td></tr>
+  </table></div>
+
+  <h3>Record fields</h3>
+  <div class="tbl"><table>
+    <tr><th>Field</th><th>Req.</th><th>Meaning</th></tr>
+    <tr><td>record_id</td><td class="req">✓</td><td>Unique and stable. <b>Records are immutable.</b> To correct or update a value, send a new record with a new ID.</td></tr>
+    <tr><td>member_id</td><td class="req">✓</td><td>Primary owner. Must appear in <code>members</code>.</td></tr>
+    <tr><td>co_owner_ids</td><td class="opt-c">–</td><td>Other owners of joint assets, loans or shared expenses.</td></tr>
+    <tr><td>type</td><td class="req">✓</td><td>One of the ten types in section 04.</td></tr>
+    <tr><td>category</td><td class="req">✓</td><td>snake_case subtype. <span class="ex">salary · professional_fees · savings_account · mutual_funds · equity_demat · home_loan · term_life · household</span></td></tr>
+    <tr><td>description</td><td class="opt-c">–</td><td>Human-readable label shown as evidence in answers.</td></tr>
+    <tr><td>amount</td><td class="req">✓</td><td><b>Decimal string</b>, such as <code>"250000"</code>, never a JSON number. Use <code>null</code> when the value could not be extracted.</td></tr>
+    <tr><td>currency</td><td class="req">✓</td><td>ISO-4217 code. <span class="ex">INR</span></td></tr>
+    <tr><td>frequency</td><td class="opt-c">–</td><td><span class="ex">monthly · quarterly · annual · one_time</span>. Use <code>null</code> for balances and valuations.</td></tr>
+    <tr><td>entity</td><td class="opt-c">–</td><td>The account or counterparty: <code>{entity_id?, entity_type, name, institution?}</code>. Types: <span class="ex">employer · bank_account · loan_account · investment_portfolio · property · insurance_policy</span>. Send a stable <code>entity_id</code> where you can, such as a masked account number. Without one, we match on name.</td></tr>
+    <tr><td>attributes</td><td class="opt-c">–</td><td>String-to-string map for type-specific details. See section 04.</td></tr>
+    <tr><td>source</td><td class="req">✓</td><td><code>{document_id, filename, document_type?, page?}</code>. Shown to users as proof, so every record needs it.</td></tr>
+    <tr><td>valid_from</td><td class="req">✓</td><td>ISO date from which the fact is true, such as the salary effective date or the statement date.</td></tr>
+    <tr><td>valid_until</td><td class="opt-c">–</td><td>ISO date, or <code>null</code> if open-ended.</td></tr>
+    <tr><td>as_of</td><td class="opt-c">–</td><td>Snapshot date for balances, valuations and outstanding loan amounts.</td></tr>
+    <tr><td>confidence</td><td class="req">✓</td><td>Your extraction confidence, from 0 to 1. Records below 0.9 are flagged in answers.</td></tr>
+    <tr><td>supersedes</td><td class="opt-c">–</td><td>Optional hint naming the <code>record_id</code> this record replaces. We also infer this ourselves.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="sec">04</span>Record types and what amount means</h2>
+  <div class="tbl"><table>
+    <tr><th>type</th><th>amount is…</th><th>frequency</th><th>attributes keys</th></tr>
+    <tr><td>income</td><td>Money received per period (salary, pension, rent, interest, fees, business profit)</td><td>monthly / annual</td><td><span class="ex">gross_or_net</span> (see section 07)</td></tr>
+    <tr><td>expense</td><td>Spend per period</td><td>monthly / annual</td><td>–</td></tr>
+    <tr><td>bank_balance</td><td>Balance on <code>as_of</code></td><td>null</td><td>–</td></tr>
+    <tr><td>investment</td><td>Market value on <code>as_of</code></td><td>null</td><td><span class="ex">liquidity</span> ("locked" for EPF, PPF, NPS, SCSS, Sukanya Samriddhi or ESOPs; inferred from the category if absent), <span class="ex">lock_in_until, guardian_member_id</span></td></tr>
+    <tr><td>asset</td><td>Estimated value (property, gold, vehicle)</td><td>null</td><td><span class="ex">valuation_basis, self_occupied</span></td></tr>
+    <tr><td>loan</td><td>Outstanding principal on <code>as_of</code></td><td>null</td><td><span class="ex">emi</span> (required for cash flow; "0" during a moratorium), <span class="ex">emi_after_moratorium, moratorium_until, interest_rate_pct, remaining_tenure_months, secured_against_entity_id</span></td></tr>
+    <tr><td>liability</td><td>Other amount owed, such as a card balance</td><td>null</td><td><span class="ex">emi</span> if there is a fixed instalment</td></tr>
+    <tr><td>insurance</td><td>Sum assured</td><td>null</td><td><span class="ex">premium, premium_frequency, nominee_member_id, insured_member_ids</span> (comma-separated, for floaters), <span class="ex">copay_pct, cover_until, paid_by_member_id</span></td></tr>
+    <tr><td>transaction</td><td>A single credit or debit</td><td>one_time</td><td>–</td></tr>
+    <tr><td>tax</td><td>Tax paid, deducted (TDS) or reported (AIS) for the period</td><td>annual</td><td><span class="ex">financial_year</span>, e.g. 2025-26. Use categories such as <span class="ex">tds_on_salary, tds_on_interest, ais_rental_receipts, itr_filed, advance_tax_paid</span>. AIS-reported income such as interest or rent goes in as <code>income</code> with <code>source.document_type: "ais"</code>.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="sec">05</span>Rules the context engine enforces</h2>
+  <p>Payloads that break R1 to R5 are rejected with a validation error. R6 to R9 are not checked automatically but affect answer quality.</p>
+  <ol class="rules">
+    <li><div><b>Amounts are decimal strings.</b> <span class="good">"250000"</span> · <span class="good">"8.4"</span> are accepted; <span class="bad">250000.5</span> · <span class="bad">"2.5L"</span> · <span class="bad">"₹2,50,000"</span> are rejected.</div></li>
+    <li><div><b>Missing means null, never zero.</b> If you could not read a value, send <code>"amount": null</code>. We exclude it and tell the user it is missing. A zero is treated as a real zero.</div></li>
+    <li><div><b>Every owner exists.</b> <code>member_id</code> and every <code>co_owner_ids</code> entry must appear in <code>members</code>.</div></li>
+    <li><div><b>record_id is unique and immutable.</b> Pushing an existing ID returns 422. Send a new record instead of editing an old one.</div></li>
+    <li><div><b>Provenance on every record.</b> <code>source.document_id</code> and <code>source.filename</code> are required.</div></li>
+    <li><div><b>Dates are ISO <code>YYYY-MM-DD</code></b> and describe when the fact was true, not when you processed the document.</div></li>
+    <li><div><b>Keep history.</b> Send the April payslip and the October payslip as two records. Don't overwrite the first one. We work out which is current.</div></li>
+    <li><div><b>Stable entity IDs.</b> The same bank account across twelve statements should carry the same <code>entity_id</code>. Name variants like "HDFC Bank" and "HDFC BANK LTD" are handled, but IDs are safer.</div></li>
+    <li><div><b>Keep the original currency.</b> Send CAD or USD amounts with their real <code>currency</code>. We report them separately and never mix them into INR totals.</div></li>
+    <li><div><b>Normalise to the owner.</b> A salary credit in the father's account belongs to the father. Joint loans and property carry both owners.</div></li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="sec">06</span>What we do with your records</h2>
+  <p>This explains why the rules above matter.</p>
+  <div class="tbl"><table>
+    <tr><th>Record</th><th>What happens when a newer one arrives</th></tr>
+    <tr><td>income</td><td>One current value per person and category. A salary from a new employer replaces the old salary. The old one stays in history as superseded.</td></tr>
+    <tr><td>balances, investments, loans, assets, insurance, expenses</td><td>One current value per person, category and entity. A newer statement for the same account replaces the older one.</td></tr>
+    <tr><td>transaction</td><td>Always added. It never replaces anything.</td></tr>
+    <tr><td>any record with a past valid_until</td><td>Marked ended. It stays in history and is left out of current totals.</td></tr>
+  </table></div>
+  <p>Ordering uses <code>as_of</code> if present, otherwise <code>valid_from</code>. Consent and privacy are handled on our side, so send everything you extract.</p>
+</section>
+
+<section>
+  <div class="callout">
+    <h3>07 · Decisions to agree before we start</h3>
+    <ol>
+      <li><b>Gross or net income.</b> Our affordability maths treats income <code>amount</code> as cash available each month. Please send take-home (net) amounts, or add <code>attributes.gross_or_net</code> with the value <code>"gross"</code> or <code>"net"</code>.</li>
+      <li><b>Category vocabulary.</b> Use the categories shown in this document where they fit. If you need a new one, tell us so it is counted correctly. For example, a new kind of loan should still have <code>type: "loan"</code>.</li>
+      <li><b>Delivery mode.</b> Choose pull or push from section 02, and share your host and port, or ask for ours.</li>
+      <li><b>Family and member IDs.</b> For the demo, keep <code>F001</code> and <code>M001</code> to <code>M003</code> exactly as in the sample below.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec">08</span>Golden sample and JSON Schemas</h2>
+  <p>Both sides test against the same synthetic family: Rajesh, Priya and Arjun Mehta, with 18 records including a salary revision, two statement dates for the same account, and a joint home loan. If your engine reproduces this sample from the matching documents, integration is done.</p>
+  <div class="codebox">
+    <div class="codebar" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="sample" id="tab-sample">F001.sample.json</button>
+      <button role="tab" aria-selected="false" data-tab="schema" id="tab-schema">financial-data-v1.schema.json</button>
+      <button role="tab" aria-selected="false" data-tab="batch" id="tab-batch">record-batch-v1.schema.json</button>
+      <span class="spacer"></span>
+      <button class="copy" id="copy">Copy</button>
+    </div>
+    <pre id="code-sample">{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;family_id&quot;: &quot;F001&quot;,
+  &quot;generated_at&quot;: &quot;2026-11-20T10:00:00Z&quot;,
+  &quot;members&quot;: [
+    {&quot;member_id&quot;: &quot;M001&quot;, &quot;name&quot;: &quot;Rajesh Mehta&quot;, &quot;relationship&quot;: &quot;father&quot;, &quot;date_of_birth&quot;: &quot;1967-03-14&quot;},
+    {&quot;member_id&quot;: &quot;M002&quot;, &quot;name&quot;: &quot;Priya Mehta&quot;, &quot;relationship&quot;: &quot;mother&quot;, &quot;date_of_birth&quot;: &quot;1971-08-02&quot;},
+    {&quot;member_id&quot;: &quot;M003&quot;, &quot;name&quot;: &quot;Arjun Mehta&quot;, &quot;relationship&quot;: &quot;son&quot;, &quot;date_of_birth&quot;: &quot;1999-12-21&quot;}
+  ],
+  &quot;financial_records&quot;: [
+    {
+      &quot;record_id&quot;: &quot;R001&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;income&quot;, &quot;category&quot;: &quot;salary&quot;,
+      &quot;description&quot;: &quot;Monthly salary — Nimbus Technologies&quot;,
+      &quot;amount&quot;: &quot;220000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;EMP-NIMBUS&quot;, &quot;entity_type&quot;: &quot;employer&quot;, &quot;name&quot;: &quot;Nimbus Technologies Pvt Ltd&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D001&quot;, &quot;filename&quot;: &quot;rajesh_payslip_mar2026.pdf&quot;, &quot;document_type&quot;: &quot;payslip&quot;},
+      &quot;valid_from&quot;: &quot;2025-04-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.97
+    },
+    {
+      &quot;record_id&quot;: &quot;R002&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;income&quot;, &quot;category&quot;: &quot;salary&quot;,
+      &quot;description&quot;: &quot;Monthly salary — Nimbus Technologies (annual revision)&quot;,
+      &quot;amount&quot;: &quot;250000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;EMP-NIMBUS&quot;, &quot;entity_type&quot;: &quot;employer&quot;, &quot;name&quot;: &quot;NIMBUS TECHNOLOGIES PVT. LTD.&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D002&quot;, &quot;filename&quot;: &quot;rajesh_payslip_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;payslip&quot;},
+      &quot;valid_from&quot;: &quot;2026-04-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.98
+    },
+    {
+      &quot;record_id&quot;: &quot;R003&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;bank_balance&quot;, &quot;category&quot;: &quot;savings_account&quot;,
+      &quot;description&quot;: &quot;HDFC savings account balance&quot;,
+      &quot;amount&quot;: &quot;1800000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;ACC-HDFC-4521&quot;, &quot;entity_type&quot;: &quot;bank_account&quot;, &quot;name&quot;: &quot;HDFC Savings ••4521&quot;, &quot;institution&quot;: &quot;HDFC Bank&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D003&quot;, &quot;filename&quot;: &quot;rajesh_hdfc_statement_jun2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-06-30&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-06-30&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R004&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;bank_balance&quot;, &quot;category&quot;: &quot;savings_account&quot;,
+      &quot;description&quot;: &quot;HDFC savings account balance&quot;,
+      &quot;amount&quot;: &quot;2000000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;ACC-HDFC-4521&quot;, &quot;entity_type&quot;: &quot;bank_account&quot;, &quot;name&quot;: &quot;HDFC Savings ••4521&quot;, &quot;institution&quot;: &quot;HDFC BANK LTD&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D004&quot;, &quot;filename&quot;: &quot;rajesh_hdfc_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-10-31&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R005&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;co_owner_ids&quot;: [&quot;M002&quot;], &quot;type&quot;: &quot;loan&quot;, &quot;category&quot;: &quot;home_loan&quot;,
+      &quot;description&quot;: &quot;SBI home loan — outstanding principal&quot;,
+      &quot;amount&quot;: &quot;3200000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;LOAN-SBI-7781&quot;, &quot;entity_type&quot;: &quot;loan_account&quot;, &quot;name&quot;: &quot;SBI Home Loan ••7781&quot;, &quot;institution&quot;: &quot;State Bank of India&quot;},
+      &quot;attributes&quot;: {&quot;emi&quot;: &quot;40000&quot;, &quot;emi_frequency&quot;: &quot;monthly&quot;, &quot;interest_rate_pct&quot;: &quot;8.4&quot;, &quot;remaining_tenure_months&quot;: &quot;96&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D005&quot;, &quot;filename&quot;: &quot;sbi_home_loan_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;loan_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-10-31&quot;, &quot;confidence&quot;: 0.96
+    },
+    {
+      &quot;record_id&quot;: &quot;R006&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;co_owner_ids&quot;: [&quot;M002&quot;], &quot;type&quot;: &quot;asset&quot;, &quot;category&quot;: &quot;residential_property&quot;,
+      &quot;description&quot;: &quot;Family residence, Baner, Pune (self-occupied)&quot;,
+      &quot;amount&quot;: &quot;9500000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;PROP-PUNE-01&quot;, &quot;entity_type&quot;: &quot;property&quot;, &quot;name&quot;: &quot;Baner residence, Pune&quot;},
+      &quot;attributes&quot;: {&quot;valuation_basis&quot;: &quot;registered sale deed + indexation estimate&quot;, &quot;self_occupied&quot;: &quot;true&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D006&quot;, &quot;filename&quot;: &quot;baner_sale_deed.pdf&quot;, &quot;document_type&quot;: &quot;property_document&quot;},
+      &quot;valid_from&quot;: &quot;2019-02-15&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-04-01&quot;, &quot;confidence&quot;: 0.8
+    },
+    {
+      &quot;record_id&quot;: &quot;R007&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;insurance&quot;, &quot;category&quot;: &quot;term_life&quot;,
+      &quot;description&quot;: &quot;Term life cover — HDFC Life Click2Protect&quot;,
+      &quot;amount&quot;: &quot;10000000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;POL-HDFCLIFE-3310&quot;, &quot;entity_type&quot;: &quot;insurance_policy&quot;, &quot;name&quot;: &quot;HDFC Life term policy ••3310&quot;, &quot;institution&quot;: &quot;HDFC Life&quot;},
+      &quot;attributes&quot;: {&quot;premium&quot;: &quot;18000&quot;, &quot;premium_frequency&quot;: &quot;annual&quot;, &quot;nominee_member_id&quot;: &quot;M002&quot;, &quot;cover_until&quot;: &quot;2032-03-14&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D007&quot;, &quot;filename&quot;: &quot;hdfc_life_policy_schedule.pdf&quot;, &quot;document_type&quot;: &quot;insurance_policy&quot;},
+      &quot;valid_from&quot;: &quot;2022-03-15&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.95
+    },
+    {
+      &quot;record_id&quot;: &quot;R008&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;co_owner_ids&quot;: [&quot;M002&quot;], &quot;type&quot;: &quot;expense&quot;, &quot;category&quot;: &quot;household&quot;,
+      &quot;description&quot;: &quot;Household running expenses (groceries, utilities, school/medical, staff)&quot;,
+      &quot;amount&quot;: &quot;120000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D004&quot;, &quot;filename&quot;: &quot;rajesh_hdfc_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-05-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.85
+    },
+    {
+      &quot;record_id&quot;: &quot;R009&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;transaction&quot;, &quot;category&quot;: &quot;salary_credit&quot;,
+      &quot;description&quot;: &quot;Salary credit — NIMBUS TECH&quot;,
+      &quot;amount&quot;: &quot;250000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;one_time&quot;,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;ACC-HDFC-4521&quot;, &quot;entity_type&quot;: &quot;bank_account&quot;, &quot;name&quot;: &quot;HDFC Savings ••4521&quot;, &quot;institution&quot;: &quot;HDFC Bank&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D004&quot;, &quot;filename&quot;: &quot;rajesh_hdfc_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-09-30&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R010&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;transaction&quot;, &quot;category&quot;: &quot;salary_credit&quot;,
+      &quot;description&quot;: &quot;Salary credit — NIMBUS TECH&quot;,
+      &quot;amount&quot;: &quot;250000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;one_time&quot;,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;ACC-HDFC-4521&quot;, &quot;entity_type&quot;: &quot;bank_account&quot;, &quot;name&quot;: &quot;HDFC Savings ••4521&quot;, &quot;institution&quot;: &quot;HDFC Bank&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D004&quot;, &quot;filename&quot;: &quot;rajesh_hdfc_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R011&quot;, &quot;member_id&quot;: &quot;M001&quot;, &quot;type&quot;: &quot;tax&quot;, &quot;category&quot;: &quot;income_tax_paid&quot;,
+      &quot;description&quot;: &quot;Income tax paid, FY 2025-26 (Form 26AS)&quot;,
+      &quot;amount&quot;: &quot;540000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;annual&quot;,
+      &quot;attributes&quot;: {&quot;financial_year&quot;: &quot;2025-26&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D008&quot;, &quot;filename&quot;: &quot;rajesh_26AS_FY2025-26.pdf&quot;, &quot;document_type&quot;: &quot;form_26as&quot;},
+      &quot;valid_from&quot;: &quot;2025-04-01&quot;, &quot;valid_until&quot;: &quot;2026-03-31&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R012&quot;, &quot;member_id&quot;: &quot;M002&quot;, &quot;type&quot;: &quot;income&quot;, &quot;category&quot;: &quot;professional_fees&quot;,
+      &quot;description&quot;: &quot;Consulting income (interior design practice)&quot;,
+      &quot;amount&quot;: &quot;80000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D009&quot;, &quot;filename&quot;: &quot;priya_icici_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2025-07-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.88
+    },
+    {
+      &quot;record_id&quot;: &quot;R013&quot;, &quot;member_id&quot;: &quot;M002&quot;, &quot;type&quot;: &quot;investment&quot;, &quot;category&quot;: &quot;mutual_funds&quot;,
+      &quot;description&quot;: &quot;Mutual fund portfolio (CAS)&quot;,
+      &quot;amount&quot;: &quot;1350000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;INV-CAS-M002&quot;, &quot;entity_type&quot;: &quot;investment_portfolio&quot;, &quot;name&quot;: &quot;Priya — MF portfolio (CAMS CAS)&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D010&quot;, &quot;filename&quot;: &quot;priya_cas_jun2026.pdf&quot;, &quot;document_type&quot;: &quot;cas_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-06-30&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-06-30&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R014&quot;, &quot;member_id&quot;: &quot;M002&quot;, &quot;type&quot;: &quot;investment&quot;, &quot;category&quot;: &quot;mutual_funds&quot;,
+      &quot;description&quot;: &quot;Mutual fund portfolio (CAS)&quot;,
+      &quot;amount&quot;: &quot;1500000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;INV-CAS-M002&quot;, &quot;entity_type&quot;: &quot;investment_portfolio&quot;, &quot;name&quot;: &quot;Priya — MF portfolio (CAMS CAS)&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D011&quot;, &quot;filename&quot;: &quot;priya_cas_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;cas_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-10-31&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R015&quot;, &quot;member_id&quot;: &quot;M003&quot;, &quot;type&quot;: &quot;income&quot;, &quot;category&quot;: &quot;salary&quot;,
+      &quot;description&quot;: &quot;Monthly salary — Quantleaf Analytics&quot;,
+      &quot;amount&quot;: &quot;300000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;EMP-QUANTLEAF&quot;, &quot;entity_type&quot;: &quot;employer&quot;, &quot;name&quot;: &quot;Quantleaf Analytics&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D012&quot;, &quot;filename&quot;: &quot;arjun_offer_letter_and_payslip_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;payslip&quot;},
+      &quot;valid_from&quot;: &quot;2026-07-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.98
+    },
+    {
+      &quot;record_id&quot;: &quot;R016&quot;, &quot;member_id&quot;: &quot;M003&quot;, &quot;type&quot;: &quot;investment&quot;, &quot;category&quot;: &quot;equity_demat&quot;,
+      &quot;description&quot;: &quot;Equity holdings (Zerodha demat)&quot;,
+      &quot;amount&quot;: &quot;1000000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;INV-DEMAT-M003&quot;, &quot;entity_type&quot;: &quot;investment_portfolio&quot;, &quot;name&quot;: &quot;Arjun — Zerodha demat&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D013&quot;, &quot;filename&quot;: &quot;arjun_zerodha_holdings_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;demat_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-10-31&quot;, &quot;confidence&quot;: 0.99
+    },
+    {
+      &quot;record_id&quot;: &quot;R017&quot;, &quot;member_id&quot;: &quot;M003&quot;, &quot;type&quot;: &quot;expense&quot;, &quot;category&quot;: &quot;personal&quot;,
+      &quot;description&quot;: &quot;Personal expenses (rent share, travel, subscriptions)&quot;,
+      &quot;amount&quot;: &quot;40000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: &quot;monthly&quot;,
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D014&quot;, &quot;filename&quot;: &quot;arjun_axis_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;bank_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-07-01&quot;, &quot;valid_until&quot;: null, &quot;confidence&quot;: 0.82
+    },
+    {
+      &quot;record_id&quot;: &quot;R018&quot;, &quot;member_id&quot;: &quot;M003&quot;, &quot;type&quot;: &quot;investment&quot;, &quot;category&quot;: &quot;crypto&quot;,
+      &quot;description&quot;: &quot;Crypto holdings (exchange wallet)&quot;,
+      &quot;amount&quot;: &quot;200000&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;frequency&quot;: null,
+      &quot;entity&quot;: {&quot;entity_id&quot;: &quot;INV-CRYPTO-M003&quot;, &quot;entity_type&quot;: &quot;investment_portfolio&quot;, &quot;name&quot;: &quot;Arjun — crypto wallet&quot;},
+      &quot;source&quot;: {&quot;document_id&quot;: &quot;D015&quot;, &quot;filename&quot;: &quot;arjun_exchange_statement_oct2026.pdf&quot;, &quot;document_type&quot;: &quot;exchange_statement&quot;},
+      &quot;valid_from&quot;: &quot;2026-10-31&quot;, &quot;valid_until&quot;: null, &quot;as_of&quot;: &quot;2026-10-31&quot;, &quot;confidence&quot;: 0.9
+    }
+  ]
+}</pre>
+    <pre id="code-schema" hidden>{
+  &quot;$defs&quot;: {
+    &quot;EntityRef&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;entity_id&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Entity Id&quot;
+        },
+        &quot;entity_type&quot;: {
+          &quot;title&quot;: &quot;Entity Type&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;name&quot;: {
+          &quot;title&quot;: &quot;Name&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;institution&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Institution&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;entity_type&quot;,
+        &quot;name&quot;
+      ],
+      &quot;title&quot;: &quot;EntityRef&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;FinancialRecord&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;record_id&quot;: {
+          &quot;title&quot;: &quot;Record Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;member_id&quot;: {
+          &quot;title&quot;: &quot;Member Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;co_owner_ids&quot;: {
+          &quot;items&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;title&quot;: &quot;Co Owner Ids&quot;,
+          &quot;type&quot;: &quot;array&quot;
+        },
+        &quot;type&quot;: {
+          &quot;enum&quot;: [
+            &quot;income&quot;,
+            &quot;expense&quot;,
+            &quot;bank_balance&quot;,
+            &quot;investment&quot;,
+            &quot;insurance&quot;,
+            &quot;loan&quot;,
+            &quot;asset&quot;,
+            &quot;liability&quot;,
+            &quot;transaction&quot;,
+            &quot;tax&quot;
+          ],
+          &quot;title&quot;: &quot;Type&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;category&quot;: {
+          &quot;title&quot;: &quot;Category&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;description&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Description&quot;
+        },
+        &quot;amount&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;title&quot;: &quot;Amount&quot;
+        },
+        &quot;currency&quot;: {
+          &quot;title&quot;: &quot;Currency&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;frequency&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;enum&quot;: [
+                &quot;monthly&quot;,
+                &quot;quarterly&quot;,
+                &quot;annual&quot;,
+                &quot;one_time&quot;
+              ],
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Frequency&quot;
+        },
+        &quot;entity&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;$ref&quot;: &quot;#/$defs/EntityRef&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null
+        },
+        &quot;attributes&quot;: {
+          &quot;additionalProperties&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;title&quot;: &quot;Attributes&quot;,
+          &quot;type&quot;: &quot;object&quot;
+        },
+        &quot;source&quot;: {
+          &quot;$ref&quot;: &quot;#/$defs/Source&quot;
+        },
+        &quot;valid_from&quot;: {
+          &quot;format&quot;: &quot;date&quot;,
+          &quot;title&quot;: &quot;Valid From&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;valid_until&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;format&quot;: &quot;date&quot;,
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Valid Until&quot;
+        },
+        &quot;as_of&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;format&quot;: &quot;date&quot;,
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;As Of&quot;
+        },
+        &quot;confidence&quot;: {
+          &quot;maximum&quot;: 1,
+          &quot;minimum&quot;: 0,
+          &quot;title&quot;: &quot;Confidence&quot;,
+          &quot;type&quot;: &quot;number&quot;
+        },
+        &quot;supersedes&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Supersedes&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;record_id&quot;,
+        &quot;member_id&quot;,
+        &quot;type&quot;,
+        &quot;category&quot;,
+        &quot;amount&quot;,
+        &quot;currency&quot;,
+        &quot;source&quot;,
+        &quot;valid_from&quot;,
+        &quot;confidence&quot;
+      ],
+      &quot;title&quot;: &quot;FinancialRecord&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;Member&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;member_id&quot;: {
+          &quot;title&quot;: &quot;Member Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;name&quot;: {
+          &quot;title&quot;: &quot;Name&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;relationship&quot;: {
+          &quot;title&quot;: &quot;Relationship&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;date_of_birth&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;format&quot;: &quot;date&quot;,
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Date Of Birth&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;member_id&quot;,
+        &quot;name&quot;,
+        &quot;relationship&quot;
+      ],
+      &quot;title&quot;: &quot;Member&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;Source&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;document_id&quot;: {
+          &quot;title&quot;: &quot;Document Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;filename&quot;: {
+          &quot;title&quot;: &quot;Filename&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;document_type&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Document Type&quot;
+        },
+        &quot;page&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;integer&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Page&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;document_id&quot;,
+        &quot;filename&quot;
+      ],
+      &quot;title&quot;: &quot;Source&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    }
+  },
+  &quot;additionalProperties&quot;: true,
+  &quot;properties&quot;: {
+    &quot;schema_version&quot;: {
+      &quot;const&quot;: &quot;1.0&quot;,
+      &quot;title&quot;: &quot;Schema Version&quot;,
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;family_id&quot;: {
+      &quot;title&quot;: &quot;Family Id&quot;,
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;members&quot;: {
+      &quot;items&quot;: {
+        &quot;$ref&quot;: &quot;#/$defs/Member&quot;
+      },
+      &quot;title&quot;: &quot;Members&quot;,
+      &quot;type&quot;: &quot;array&quot;
+    },
+    &quot;financial_records&quot;: {
+      &quot;items&quot;: {
+        &quot;$ref&quot;: &quot;#/$defs/FinancialRecord&quot;
+      },
+      &quot;title&quot;: &quot;Financial Records&quot;,
+      &quot;type&quot;: &quot;array&quot;
+    }
+  },
+  &quot;required&quot;: [
+    &quot;schema_version&quot;,
+    &quot;family_id&quot;,
+    &quot;members&quot;,
+    &quot;financial_records&quot;
+  ],
+  &quot;title&quot;: &quot;FamilyFinancialData&quot;,
+  &quot;type&quot;: &quot;object&quot;
+}</pre>
+    <pre id="code-batch" hidden>{
+  &quot;$defs&quot;: {
+    &quot;EntityRef&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;entity_id&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Entity Id&quot;
+        },
+        &quot;entity_type&quot;: {
+          &quot;title&quot;: &quot;Entity Type&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;name&quot;: {
+          &quot;title&quot;: &quot;Name&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;institution&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Institution&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;entity_type&quot;,
+        &quot;name&quot;
+      ],
+      &quot;title&quot;: &quot;EntityRef&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;FinancialRecord&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;record_id&quot;: {
+          &quot;title&quot;: &quot;Record Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;member_id&quot;: {
+          &quot;title&quot;: &quot;Member Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;co_owner_ids&quot;: {
+          &quot;items&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;title&quot;: &quot;Co Owner Ids&quot;,
+          &quot;type&quot;: &quot;array&quot;
+        },
+        &quot;type&quot;: {
+          &quot;enum&quot;: [
+            &quot;income&quot;,
+            &quot;expense&quot;,
+            &quot;bank_balance&quot;,
+            &quot;investment&quot;,
+            &quot;insurance&quot;,
+            &quot;loan&quot;,
+            &quot;asset&quot;,
+            &quot;liability&quot;,
+            &quot;transaction&quot;,
+            &quot;tax&quot;
+          ],
+          &quot;title&quot;: &quot;Type&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;category&quot;: {
+          &quot;title&quot;: &quot;Category&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;description&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Description&quot;
+        },
+        &quot;amount&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;title&quot;: &quot;Amount&quot;
+        },
+        &quot;currency&quot;: {
+          &quot;title&quot;: &quot;Currency&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;frequency&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;enum&quot;: [
+                &quot;monthly&quot;,
+                &quot;quarterly&quot;,
+                &quot;annual&quot;,
+                &quot;one_time&quot;
+              ],
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Frequency&quot;
+        },
+        &quot;entity&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;$ref&quot;: &quot;#/$defs/EntityRef&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null
+        },
+        &quot;attributes&quot;: {
+          &quot;additionalProperties&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;title&quot;: &quot;Attributes&quot;,
+          &quot;type&quot;: &quot;object&quot;
+        },
+        &quot;source&quot;: {
+          &quot;$ref&quot;: &quot;#/$defs/Source&quot;
+        },
+        &quot;valid_from&quot;: {
+          &quot;format&quot;: &quot;date&quot;,
+          &quot;title&quot;: &quot;Valid From&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;valid_until&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;format&quot;: &quot;date&quot;,
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Valid Until&quot;
+        },
+        &quot;as_of&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;format&quot;: &quot;date&quot;,
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;As Of&quot;
+        },
+        &quot;confidence&quot;: {
+          &quot;maximum&quot;: 1,
+          &quot;minimum&quot;: 0,
+          &quot;title&quot;: &quot;Confidence&quot;,
+          &quot;type&quot;: &quot;number&quot;
+        },
+        &quot;supersedes&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Supersedes&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;record_id&quot;,
+        &quot;member_id&quot;,
+        &quot;type&quot;,
+        &quot;category&quot;,
+        &quot;amount&quot;,
+        &quot;currency&quot;,
+        &quot;source&quot;,
+        &quot;valid_from&quot;,
+        &quot;confidence&quot;
+      ],
+      &quot;title&quot;: &quot;FinancialRecord&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;Source&quot;: {
+      &quot;additionalProperties&quot;: true,
+      &quot;properties&quot;: {
+        &quot;document_id&quot;: {
+          &quot;title&quot;: &quot;Document Id&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;filename&quot;: {
+          &quot;title&quot;: &quot;Filename&quot;,
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;document_type&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;string&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Document Type&quot;
+        },
+        &quot;page&quot;: {
+          &quot;anyOf&quot;: [
+            {
+              &quot;type&quot;: &quot;integer&quot;
+            },
+            {
+              &quot;type&quot;: &quot;null&quot;
+            }
+          ],
+          &quot;default&quot;: null,
+          &quot;title&quot;: &quot;Page&quot;
+        }
+      },
+      &quot;required&quot;: [
+        &quot;document_id&quot;,
+        &quot;filename&quot;
+      ],
+      &quot;title&quot;: &quot;Source&quot;,
+      &quot;type&quot;: &quot;object&quot;
+    }
+  },
+  &quot;description&quot;: &quot;Incremental push from the Financial Data Engine (e.g. a newly processed document).&quot;,
+  &quot;properties&quot;: {
+    &quot;schema_version&quot;: {
+      &quot;const&quot;: &quot;1.0&quot;,
+      &quot;title&quot;: &quot;Schema Version&quot;,
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;family_id&quot;: {
+      &quot;title&quot;: &quot;Family Id&quot;,
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;financial_records&quot;: {
+      &quot;items&quot;: {
+        &quot;$ref&quot;: &quot;#/$defs/FinancialRecord&quot;
+      },
+      &quot;title&quot;: &quot;Financial Records&quot;,
+      &quot;type&quot;: &quot;array&quot;
+    }
+  },
+  &quot;required&quot;: [
+    &quot;schema_version&quot;,
+    &quot;family_id&quot;,
+    &quot;financial_records&quot;
+  ],
+  &quot;title&quot;: &quot;RecordBatch&quot;,
+  &quot;type&quot;: &quot;object&quot;
+}</pre>
+    <div class="codenote" id="note">Full snapshot for the pull option. Copy it and save it as <code>F001.sample.json</code>.</div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec">09</span>Done checklist</h2>
+  <p>Check any payload without storing it: <code>POST http://&lt;context-engine-host&gt;:8000/api/contract/validate</code>. Send a full snapshot or a record batch. The response lists every error with its JSON path, plus warnings such as a loan without an EMI. If your pull endpoint is down or sends invalid data, the context engine falls back to the sample data on its own, so the demo keeps running.</p>
+  <ul class="checklist">
+    <li><code>/api/contract/validate</code> returns <code>"valid": true</code> with no warnings for your output.</li>
+    <li>Your output validates against <code>financial-data-v1.schema.json</code>, using any JSON Schema validator.</li>
+    <li>No amounts are floats or contain currency symbols, and unreadable values are <code>null</code>.</li>
+    <li>Every record has <code>source.document_id</code> and <code>source.filename</code>.</li>
+    <li>Loans include <code>attributes.emi</code>.</li>
+    <li>Repeated statements for one account share an <code>entity_id</code>.</li>
+    <li>Older payslips and statements are sent as their own records, not overwritten.</li>
+    <li>A test call to the endpoint you chose (pull or push) returns 200 against the running context engine.</li>
+  </ul>
+</section>
+
+<footer>FamilyOS · Contract A, schema_version 1.0 · All family data is synthetic. Breaking changes bump <code>schema_version</code>. New optional fields and attribute keys can be added freely, because the context engine ignores unknown fields.</footer>
+</div>
+
+<script>
+const notes = {
+  sample: 'Full snapshot for the pull option. Copy it and save it as <code>F001.sample.json</code>.',
+  schema: 'JSON Schema (draft 2020-12) for the full payload. Use it to validate your output in any language.',
+  batch: 'JSON Schema for the push option body: <code>POST /api/family/{id}/records</code>.'
+};
+let active = 'sample';
+document.querySelectorAll('[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    active = btn.dataset.tab;
+    document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-selected', String(b === btn)));
+    ['sample', 'schema', 'batch'].forEach(k => { document.getElementById('code-' + k).hidden = k !== active; });
+    document.getElementById('note').innerHTML = notes[active];
+    document.getElementById('copy').textContent = 'Copy';
+  });
+});
+document.getElementById('copy').addEventListener('click', async () => {
+  const pre = document.getElementById('code-' + active);
+  const btn = document.getElementById('copy');
+  try {
+    await navigator.clipboard.writeText(pre.textContent);
+    btn.textContent = 'Copied';
+  } catch (e) {
+    const r = document.createRange(); r.selectNodeContents(pre);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    btn.textContent = 'Selected — press ⌘C';
+  }
+});
+</script>

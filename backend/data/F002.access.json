@@ -1,0 +1,36 @@
+{
+  "_comment": "Owned by the Context Engine. Consent each member has given for sharing with the family.",
+  "family_id": "F002",
+  "policies": {
+    "M201": {
+      "share_with_family": true,
+      "private_record_ids": []
+    },
+    "M202": {
+      "share_with_family": true,
+      "private_record_ids": []
+    },
+    "M203": {
+      "share_with_family": true,
+      "private_record_ids": []
+    },
+    "M204": {
+      "share_with_family": true,
+      "private_record_ids": [
+        "R240"
+      ]
+    },
+    "M205": {
+      "share_with_family": true,
+      "private_record_ids": []
+    },
+    "M206": {
+      "share_with_family": true,
+      "private_record_ids": []
+    },
+    "M207": {
+      "share_with_family": false,
+      "private_record_ids": []
+    }
+  }
+}

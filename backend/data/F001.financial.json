@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "family_id": "F001",
+  "generated_at": "2026-11-20T10:00:00Z",
+  "members": [
+    {"member_id": "M001", "name": "Rajesh Mehta", "relationship": "father", "date_of_birth": "1967-03-14"},
+    {"member_id": "M002", "name": "Priya Mehta", "relationship": "mother", "date_of_birth": "1971-08-02"},
+    {"member_id": "M003", "name": "Arjun Mehta", "relationship": "son", "date_of_birth": "1999-12-21"}
+  ],
+  "financial_records": [
+    {
+      "record_id": "R001", "member_id": "M001", "type": "income", "category": "salary",
+      "description": "Monthly salary — Nimbus Technologies",
+      "amount": "220000", "currency": "INR", "frequency": "monthly",
+      "entity": {"entity_id": "EMP-NIMBUS", "entity_type": "employer", "name": "Nimbus Technologies Pvt Ltd"},
+      "source": {"document_id": "D001", "filename": "rajesh_payslip_mar2026.pdf", "document_type": "payslip"},
+      "valid_from": "2025-04-01", "valid_until": null, "confidence": 0.97
+    },
+    {
+      "record_id": "R002", "member_id": "M001", "type": "income", "category": "salary",
+      "description": "Monthly salary — Nimbus Technologies (annual revision)",
+      "amount": "250000", "currency": "INR", "frequency": "monthly",
+      "entity": {"entity_id": "EMP-NIMBUS", "entity_type": "employer", "name": "NIMBUS TECHNOLOGIES PVT. LTD."},
+      "source": {"document_id": "D002", "filename": "rajesh_payslip_oct2026.pdf", "document_type": "payslip"},
+      "valid_from": "2026-04-01", "valid_until": null, "confidence": 0.98
+    },
+    {
+      "record_id": "R003", "member_id": "M001", "type": "bank_balance", "category": "savings_account",
+      "description": "HDFC savings account balance",
+      "amount": "1800000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "ACC-HDFC-4521", "entity_type": "bank_account", "name": "HDFC Savings ••4521", "institution": "HDFC Bank"},
+      "source": {"document_id": "D003", "filename": "rajesh_hdfc_statement_jun2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-06-30", "valid_until": null, "as_of": "2026-06-30", "confidence": 0.99
+    },
+    {
+      "record_id": "R004", "member_id": "M001", "type": "bank_balance", "category": "savings_account",
+      "description": "HDFC savings account balance",
+      "amount": "2000000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "ACC-HDFC-4521", "entity_type": "bank_account", "name": "HDFC Savings ••4521", "institution": "HDFC BANK LTD"},
+      "source": {"document_id": "D004", "filename": "rajesh_hdfc_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "as_of": "2026-10-31", "confidence": 0.99
+    },
+    {
+      "record_id": "R005", "member_id": "M001", "co_owner_ids": ["M002"], "type": "loan", "category": "home_loan",
+      "description": "SBI home loan — outstanding principal",
+      "amount": "3200000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "LOAN-SBI-7781", "entity_type": "loan_account", "name": "SBI Home Loan ••7781", "institution": "State Bank of India"},
+      "attributes": {"emi": "40000", "emi_frequency": "monthly", "interest_rate_pct": "8.4", "remaining_tenure_months": "96"},
+      "source": {"document_id": "D005", "filename": "sbi_home_loan_statement_oct2026.pdf", "document_type": "loan_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "as_of": "2026-10-31", "confidence": 0.96
+    },
+    {
+      "record_id": "R006", "member_id": "M001", "co_owner_ids": ["M002"], "type": "asset", "category": "residential_property",
+      "description": "Family residence, Baner, Pune (self-occupied)",
+      "amount": "9500000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "PROP-PUNE-01", "entity_type": "property", "name": "Baner residence, Pune"},
+      "attributes": {"valuation_basis": "registered sale deed + indexation estimate", "self_occupied": "true"},
+      "source": {"document_id": "D006", "filename": "baner_sale_deed.pdf", "document_type": "property_document"},
+      "valid_from": "2019-02-15", "valid_until": null, "as_of": "2026-04-01", "confidence": 0.8
+    },
+    {
+      "record_id": "R007", "member_id": "M001", "type": "insurance", "category": "term_life",
+      "description": "Term life cover — HDFC Life Click2Protect",
+      "amount": "10000000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "POL-HDFCLIFE-3310", "entity_type": "insurance_policy", "name": "HDFC Life term policy ••3310", "institution": "HDFC Life"},
+      "attributes": {"premium": "18000", "premium_frequency": "annual", "nominee_member_id": "M002", "cover_until": "2032-03-14"},
+      "source": {"document_id": "D007", "filename": "hdfc_life_policy_schedule.pdf", "document_type": "insurance_policy"},
+      "valid_from": "2022-03-15", "valid_until": null, "confidence": 0.95
+    },
+    {
+      "record_id": "R008", "member_id": "M001", "co_owner_ids": ["M002"], "type": "expense", "category": "household",
+      "description": "Household running expenses (groceries, utilities, school/medical, staff)",
+      "amount": "120000", "currency": "INR", "frequency": "monthly",
+      "source": {"document_id": "D004", "filename": "rajesh_hdfc_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-05-01", "valid_until": null, "confidence": 0.85
+    },
+    {
+      "record_id": "R009", "member_id": "M001", "type": "transaction", "category": "salary_credit",
+      "description": "Salary credit — NIMBUS TECH",
+      "amount": "250000", "currency": "INR", "frequency": "one_time",
+      "entity": {"entity_id": "ACC-HDFC-4521", "entity_type": "bank_account", "name": "HDFC Savings ••4521", "institution": "HDFC Bank"},
+      "source": {"document_id": "D004", "filename": "rajesh_hdfc_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-09-30", "valid_until": null, "confidence": 0.99
+    },
+    {
+      "record_id": "R010", "member_id": "M001", "type": "transaction", "category": "salary_credit",
+      "description": "Salary credit — NIMBUS TECH",
+      "amount": "250000", "currency": "INR", "frequency": "one_time",
+      "entity": {"entity_id": "ACC-HDFC-4521", "entity_type": "bank_account", "name": "HDFC Savings ••4521", "institution": "HDFC Bank"},
+      "source": {"document_id": "D004", "filename": "rajesh_hdfc_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "confidence": 0.99
+    },
+    {
+      "record_id": "R011", "member_id": "M001", "type": "tax", "category": "income_tax_paid",
+      "description": "Income tax paid, FY 2025-26 (Form 26AS)",
+      "amount": "540000", "currency": "INR", "frequency": "annual",
+      "attributes": {"financial_year": "2025-26"},
+      "source": {"document_id": "D008", "filename": "rajesh_26AS_FY2025-26.pdf", "document_type": "form_26as"},
+      "valid_from": "2025-04-01", "valid_until": "2026-03-31", "confidence": 0.99
+    },
+    {
+      "record_id": "R012", "member_id": "M002", "type": "income", "category": "professional_fees",
+      "description": "Consulting income (interior design practice)",
+      "amount": "80000", "currency": "INR", "frequency": "monthly",
+      "source": {"document_id": "D009", "filename": "priya_icici_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2025-07-01", "valid_until": null, "confidence": 0.88
+    },
+    {
+      "record_id": "R013", "member_id": "M002", "type": "investment", "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "1350000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "INV-CAS-M002", "entity_type": "investment_portfolio", "name": "Priya — MF portfolio (CAMS CAS)"},
+      "source": {"document_id": "D010", "filename": "priya_cas_jun2026.pdf", "document_type": "cas_statement"},
+      "valid_from": "2026-06-30", "valid_until": null, "as_of": "2026-06-30", "confidence": 0.99
+    },
+    {
+      "record_id": "R014", "member_id": "M002", "type": "investment", "category": "mutual_funds",
+      "description": "Mutual fund portfolio (CAS)",
+      "amount": "1500000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "INV-CAS-M002", "entity_type": "investment_portfolio", "name": "Priya — MF portfolio (CAMS CAS)"},
+      "source": {"document_id": "D011", "filename": "priya_cas_oct2026.pdf", "document_type": "cas_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "as_of": "2026-10-31", "confidence": 0.99
+    },
+    {
+      "record_id": "R015", "member_id": "M003", "type": "income", "category": "salary",
+      "description": "Monthly salary — Quantleaf Analytics",
+      "amount": "300000", "currency": "INR", "frequency": "monthly",
+      "entity": {"entity_id": "EMP-QUANTLEAF", "entity_type": "employer", "name": "Quantleaf Analytics"},
+      "source": {"document_id": "D012", "filename": "arjun_offer_letter_and_payslip_oct2026.pdf", "document_type": "payslip"},
+      "valid_from": "2026-07-01", "valid_until": null, "confidence": 0.98
+    },
+    {
+      "record_id": "R016", "member_id": "M003", "type": "investment", "category": "equity_demat",
+      "description": "Equity holdings (Zerodha demat)",
+      "amount": "1000000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "INV-DEMAT-M003", "entity_type": "investment_portfolio", "name": "Arjun — Zerodha demat"},
+      "source": {"document_id": "D013", "filename": "arjun_zerodha_holdings_oct2026.pdf", "document_type": "demat_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "as_of": "2026-10-31", "confidence": 0.99
+    },
+    {
+      "record_id": "R017", "member_id": "M003", "type": "expense", "category": "personal",
+      "description": "Personal expenses (rent share, travel, subscriptions)",
+      "amount": "40000", "currency": "INR", "frequency": "monthly",
+      "source": {"document_id": "D014", "filename": "arjun_axis_statement_oct2026.pdf", "document_type": "bank_statement"},
+      "valid_from": "2026-07-01", "valid_until": null, "confidence": 0.82
+    },
+    {
+      "record_id": "R018", "member_id": "M003", "type": "investment", "category": "crypto",
+      "description": "Crypto holdings (exchange wallet)",
+      "amount": "200000", "currency": "INR", "frequency": null,
+      "entity": {"entity_id": "INV-CRYPTO-M003", "entity_type": "investment_portfolio", "name": "Arjun — crypto wallet"},
+      "source": {"document_id": "D015", "filename": "arjun_exchange_statement_oct2026.pdf", "document_type": "exchange_statement"},
+      "valid_from": "2026-10-31", "valid_until": null, "as_of": "2026-10-31", "confidence": 0.9
+    }
+  ]
+}
