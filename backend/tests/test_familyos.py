@@ -358,3 +358,83 @@ def test_verify_requires_withheld_members_to_be_named(live_family):
     assert withheld_check(box2, claim, ["Rajesh has not shared tax data"])["ok"]
     _consent(client, "M001", granted=False)                                     # revoked mid-answer
     assert not consent_check(box)["ok"]
+
+
+# ---------------- live demo pack: seed + mock MF Engine over real MCP HTTP
+@pytest.fixture()
+def live_demo(tmp_path, monkeypatch):
+    """Seed backend/.demo-style data into tmp, start the mock MF Engine on a free port, point the app at both."""
+    import socket
+    import subprocess
+    import sys
+    import time
+    from app import member_gate, mf_engine
+    from tools import seed_live_demo
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]
+    env = seed_live_demo.seed(tmp_path / "demo", f"http://127.0.0.1:{port}/mcp")
+    for k, v in env.items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.setattr(context_engine.store, "dir", Path(env["FAMILYOS_DATA_DIR"]))
+    monkeypatch.setattr(member_gate, "AUDIT_DIR", Path(env["FAMILYOS_DATA_DIR"]) / "audit")
+    monkeypatch.setitem(mf_engine._tools_cache, "tools", None)
+    monkeypatch.setitem(mf_engine._tools_cache, "error", None)
+    context_engine.store._cache.clear()
+    proc = subprocess.Popen([sys.executable, str(Path(__file__).resolve().parent.parent / "tools" / "mock_mf_engine_mcp.py"), str(port)],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        for _ in range(100):
+            with socket.socket() as s:
+                if s.connect_ex(("127.0.0.1", port)) == 0:
+                    break
+            time.sleep(0.1)
+        yield env
+    finally:
+        proc.terminate()
+        proc.wait(timeout=10)
+        context_engine.store._cache.clear()
+
+
+def test_seed_never_touches_tracked_data(tmp_path):
+    from tools import seed_live_demo
+    before = {p.name: p.read_bytes() for p in DATA.glob("*.access.json")}
+    env = seed_live_demo.seed(tmp_path / "demo", "http://127.0.0.1:1/mcp")
+    assert {p.name: p.read_bytes() for p in DATA.glob("*.access.json")} == before
+    pol = json.loads((Path(env["FAMILYOS_DATA_DIR"]) / "F002.access.json").read_text())["policies"]
+    assert pol["M201"]["live_mf_consent"]["scope"] == ["liquidity"] and pol["M202"]["share_live_mf_with_family"] is False
+    ids = json.loads(Path(env["MF_ENGINE_IDENTITIES"]).read_text())["members"]
+    assert "F002:M207" not in ids and ids["F001:M001"] == {"access_token": "demo-rajesh"}
+    assert not any(p.name.startswith("P") for p in Path(env["FAMILYOS_DATA_DIR"]).iterdir())
+
+
+def test_live_demo_consent_matrix_end_to_end(live_demo):
+    from app.agentic import ToolBox
+    box = ToolBox(context_engine.store.get("F002"), "M203")                    # Suresh asks
+    names = {t["name"] for t in box.tool_defs}
+    assert "mf_family" in names and "mf_getLiquidityLadder" in names and "mf_submitRiskProfile" not in names
+    out = box.run("mf_family", {"tool": "getPortfolioSummary"})
+    st = {m: r["status"] for m, r in out["members"].items()}
+    assert st == {"M203": "ok", "M204": "ok", "M201": "out_of_scope", "M202": "no_consent",
+                  "M205": "error", "M206": "ok", "M207": "no_identity"}
+    assert out["members"]["M205"]["error"]["code"] == "UNAUTHORIZED"
+    assert "pan" not in out["members"]["M204"]["data"] and out["members"]["M203"]["data"]["pan"] == "DEFPI3456N"
+    assert out["members"]["M206"]["data"]["holdings"] == []
+    lad = box.run("mf_family", {"tool": "getLiquidityLadder", "args": {"target_amount": 1000000}, "member_ids": ["M201"]})
+    assert lad["members"]["M201"]["status"] == "ok" and lad["members"]["M201"]["data"]["target_met"] is True
+
+
+def test_live_demo_story_family_head_and_lock_in(live_demo):
+    from app import mf_engine
+    from app.agentic import ToolBox
+    box = ToolBox(context_engine.store.get("F001"), "M003")                    # Arjun asks
+    lad = box.run("mf_family", {"tool": "getLiquidityLadder", "args": {"target_amount": 3000000, "needed_by": "2027-03-31"}})
+    assert lad["withheld"] == ["M002"]                                          # Priya has not shared
+    arjun = lad["members"]["M003"]["data"]
+    assert arjun["totals"]["locked_elss_value"] == 240000                       # the 600-day ELSS lot stays locked
+    head = mf_engine.call("getHouseholdTaxHarvestPlan", {}, "F001", "M001")      # Rajesh is the MF Engine head
+    assert head["viewer_is_family_head"] and head["household"]["members_considered"] == 3
+    own = mf_engine.call("getHouseholdTaxHarvestPlan", {}, "F001", "M003")
+    assert not own["viewer_is_family_head"] and "visibility_note" in own
+    rajesh = next(m for m in head["members"] if m["name"] == "Rajesh Mehta")
+    assert rajesh["ltcg_exemption_remaining"] == 85000 and rajesh["gain_to_book_total"] == 85000

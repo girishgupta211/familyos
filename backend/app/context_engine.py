@@ -23,7 +23,8 @@ from typing import Optional
 from .contract import FamilyFinancialData, FinancialRecord, Member, RecordBatch
 from .money import inr, inr_short, pct, q
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# FAMILYOS_DATA_DIR points the engine at another copy of the data (the live demo uses one, so tracked files stay untouched).
+DATA_DIR = Path(os.environ.get("FAMILYOS_DATA_DIR") or Path(__file__).resolve().parent.parent / "data")
 TODAY = date.fromisoformat(os.environ.get("FAMILYOS_TODAY", "2026-11-22"))
 
 # Transactions are events: always appended, never superseding anything.

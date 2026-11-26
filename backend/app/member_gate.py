@@ -38,7 +38,9 @@ FAMILY_SAFE: dict[str, str] = {
 }
 SCOPES = sorted(set(FAMILY_SAFE.values()))
 
-AUDIT_DIR = Path(__file__).resolve().parent.parent / "data" / "audit"
+from .context_engine import DATA_DIR  # noqa: E402
+
+AUDIT_DIR = DATA_DIR / "audit"
 CALL_TIMEOUT_S = 75  # above mf_engine's own 60s heavy-tool timeout
 
 Status = Literal["self", "ok", "no_identity", "no_consent", "out_of_scope", "unknown_member"]
