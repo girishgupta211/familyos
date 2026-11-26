@@ -304,7 +304,7 @@ def test_fan_out_calls_only_consenting_members_and_redacts(live_family):
     audit = [json.loads(l) for l in (tmp / "audit" / "F001.live_mf.jsonl").read_text().splitlines()]
     assert [(a["asker"], a["on_behalf_of"]) for a in audit] == [("M003", "M001")]
     assert audit[0]["request_id"] == next(c[2] for c in calls if c[0] == "M001")
-    assert box.withheld_live == {"M002": "has not shared live mutual-fund data with the family"}
+    assert box.withheld_live == {"M002": {"getPortfolioSummary": "has not shared live mutual-fund data with the family"}}
     assert {c["member_id"] for c in box.live_calls} == {"M001", "M003"}
 
 
@@ -349,5 +349,12 @@ def test_verify_requires_withheld_members_to_be_named(live_family):
     assert withheld_check(box, claim, ["Priya has not shared live mutual-fund data"])["ok"]
     assert withheld_check(box, "Rajesh can raise 10 lakh.", [])["ok"]          # not a family-wide claim
     assert consent_check(box)["ok"]
+    _consent(client, "M001", scope=["portfolio"])                               # Rajesh shares portfolio only
+    box2 = ToolBox(context_engine.store.get("F001"), "M003")
+    box2.run("mf_family", {"tool": "getPortfolioSummary", "member_ids": ["M001"]})
+    box2.run("mf_family", {"tool": "getCapitalGainsSummary", "member_ids": ["M001"]})
+    assert box2.withheld_live == {"M001": {"getCapitalGainsSummary": "has not shared this kind of mutual-fund data"}}
+    assert "getCapitalGainsSummary" in withheld_check(box2, claim, [])["detail"]  # partial refusal named per tool
+    assert withheld_check(box2, claim, ["Rajesh has not shared tax data"])["ok"]
     _consent(client, "M001", granted=False)                                     # revoked mid-answer
     assert not consent_check(box)["ok"]

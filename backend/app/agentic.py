@@ -220,7 +220,7 @@ class ToolBox:
         self.mf_tools = mf_engine.tool_defs() if mf_engine.identity(ctx.family_id, asker) else []
         # Consented fan-out to other members' MF Engine logins (docs/design/family-coordinator.md).
         self.gate = member_gate.MemberGate(ctx, asker)
-        self.withheld_live: dict[str, str] = {}   # member_id -> reason, for members whose live data was not used
+        self.withheld_live: dict[str, dict[str, str]] = {}   # member_id -> {tool: reason} for refused live reads
         fan = [MF_FAMILY_TOOL] if mf_engine.configured() and self.gate.any_delegate_possible() else []
         self.tool_defs = TOOLS[:-1] + self.mf_tools + fan + TOOLS[-1:]   # keep final_answer last
 
@@ -427,7 +427,7 @@ class ToolBox:
                                     "member_id": c["member_id"], "member": self._n(c["member_id"]), "gate": c["gate"],
                                     "status": c["status"], "source_id": c["source_id"], "request_id": c["request_id"]})
         for mid in out["withheld"]:
-            self.withheld_live[mid] = out["members"][mid]["reason"]
+            self.withheld_live.setdefault(mid, {})[tool] = out["members"][mid]["reason"]
         out["members"] = {mid: {**r, "member": self._n(mid)} for mid, r in out["members"].items()}
         out["disclaimer"] = "Mutual fund investments are subject to market risks. Read all scheme related documents carefully."
         return out
@@ -646,8 +646,9 @@ def verify(state: AState, config) -> AState:
         if unknown_ids:
             problems.append(f"These record ids are unknown or not visible: {', '.join(unknown_ids)}.")
         if not checks[-1]["ok"]:
-            problems.append(f"Live mutual-fund data was withheld for {checks[-1]['detail']}; name them in missing_information "
-                            "and do not describe the result as covering the whole family's mutual funds.")
+            problems.append(f"Some live mutual-fund data was withheld ({checks[-1]['detail']}); name each of these members and "
+                            "what was not shared in missing_information, and do not describe the result as covering the whole "
+                            "family's mutual funds.")
         state["messages"].append({"role": "user", "content": [{"type": "tool_result", "tool_use_id": state["final_block_id"],
                                                                "content": "Verification failed. " + " ".join(problems), "is_error": True}]})
         upd.update(repairs=state["repairs"] + 1, final=None, messages=state["messages"])
@@ -669,7 +670,8 @@ def withheld_check(box: ToolBox, claims: str, missing: list[str]) -> dict:
     if not box.withheld_live or not _WHOLE_FAMILY.search(claims):
         return {"check": "Withheld members acknowledged", "ok": True, "detail": ""}
     text = " ".join(missing).lower()
-    unnamed = [box._n(m) for m in box.withheld_live if box._n(m).split()[0].lower() not in text]
+    unnamed = [f"{box._n(m)} ({', '.join(by_tool)})" for m, by_tool in box.withheld_live.items()
+               if box._n(m).split()[0].lower() not in text]
     return {"check": "Withheld members acknowledged", "ok": not unnamed, "detail": ", ".join(unnamed)}
 
 
@@ -712,7 +714,10 @@ def respond(state: AState, config) -> AState:
         "plan": {"tool_calls": len(tool_calls), "llm_turns": state["turns"]},
         "withheld_record_count": box.hidden,
         "live_sources": box.live_calls,
-        "withheld_live_members": [{"member_id": m, "member": box._n(m), "reason": r} for m, r in box.withheld_live.items()],
+        "withheld_live_members": [{"member_id": m, "member": box._n(m),
+                                   "withheld": [{"tool": t, "reason": r} for t, r in by_tool.items()],
+                                   "contributed_live_data": any(c["member_id"] == m and c["status"] == "ok" for c in box.live_calls)}
+                                  for m, by_tool in box.withheld_live.items()],
         "remembered_goals": store.get(ctx.family_id).goals,
         "trace": trace,
     }
