@@ -35,6 +35,7 @@ FAMILY_SAFE: dict[str, str] = {
     "getSipBook": "sips",
     "getSipSchedule": "sips",
     "getPendingActions": "sips",
+    "get_financial_plan": "goals",
 }
 SCOPES = sorted(set(FAMILY_SAFE.values()))
 

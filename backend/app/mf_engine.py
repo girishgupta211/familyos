@@ -40,8 +40,12 @@ ALLOWLIST = [
     "getPortfolioStressTest", "getRiskProfileStatus", "getPendingActions", "calculateGoalPlan",
     "calculateRetirementPlan", "calculateEmergencyFund", "getCasImportHistory", "searchFunds", "getFundDetail",
     "getPortfolioFactorExposure", "getHouseholdTaxHarvestPlan", "getLiquidityLadder",
+    # Goal planner (financial_plan): read-only views of the asker's own plan.
+    "get_financial_plan", "explain_goal", "preview_financial_plan",
 ]
-MUTATIONS = {"submitRiskProfile", "stageBucketPurchaseCart"}
+# Writes are never exposed, even though MF Engine only applies them with x-mcp-take-action (never sent).
+MUTATIONS = {"submitRiskProfile", "stageBucketPurchaseCart",
+             "add_goal", "update_goal", "remove_goal", "update_financial_plan_section", "compute_financial_plan"}
 HEAVY = {"getPortfolioXray", "getPortfolioFactorExposure", "getPortfolioStressTest", "comparePortfolioFunds", "getSmartRedemptionPlan",
          "getHouseholdTaxHarvestPlan", "getLiquidityLadder"}
 PREFIX = "mf_"

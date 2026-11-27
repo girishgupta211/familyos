@@ -311,6 +311,56 @@ def getSmartRedemptionPlan(ctx: Context, target_amount: float, goal: str = "tax"
     return getLiquidityLadder(ctx, target_amount=target_amount)
 
 
+PLANS = {  # mirrors the staging seed (mf-engine-v2 src/jobs/familyos_demo_seed)
+    "demo-rajesh": {"status": "COMPUTED", "source": "ONLINE", "goals": [
+        {"id": "g-rajesh-home", "type": "HOME", "name": "Family house (₹1.5 Cr)", "cost_today": 15_000_000, "target_date": "2027-12-31"}],
+        "result": [{"goal_id": "g-rajesh-home", "type": "HOME", "status": "UNFUNDED", "future_cost": 16_100_000, "gap": 16_036_549,
+                    "monthly_sip": 1_250_000, "funded_sip": 25_000},
+                   {"goal_id": "synth-retirement", "type": "RETIREMENT", "status": "AT_RISK", "gap": 21_500_000, "monthly_sip": 0, "funded_sip": 0}]},
+    "demo-priya": {"status": "COMPUTED", "source": "ONLINE", "goals": [
+        {"id": "g-priya-vac", "type": "VACATION", "name": "Family vacation every 2 years", "cost_today": 300_000, "target_date": "2027-05-01",
+         "recurrence": {"every_years": 2, "occurrences": 4}}],
+        "result": [{"goal_id": "g-priya-vac", "type": "VACATION", "status": "SIP_FUNDED", "sip_basis": "SINKING_FUND", "gap": 0, "monthly_sip": 22_000, "funded_sip": 22_000}]},
+    "demo-arjun": {"status": "DRAFT", "source": "ONLINE", "goals": [
+        {"id": "g-arjun-car", "type": "VEHICLE", "name": "Car", "cost_today": 1_200_000, "target_date": "2028-06-30"}], "result": None},
+    "demo-suresh": {"status": "COMPUTED", "source": "PARTNER", "goals": [
+        {"id": "g-suresh-edu", "type": "EDUCATION", "name": "Ananya — Toronto master's", "cost_today": 6_000_000, "target_date": "2027-08-31", "child_index": 0}],
+        "result": [{"goal_id": "g-suresh-edu", "type": "EDUCATION", "status": "AT_RISK", "gap": 2_400_000, "monthly_sip": 260_000, "funded_sip": 20_000}]},
+}
+
+
+def _plan_view(p):
+    key = next(k for k, v in P.items() if v is p)
+    plan = PLANS.get(key)
+    if not plan:
+        return None
+    return {"status": plan["status"], "source": plan["source"], "mode": "ILLUSTRATION", "goals": plan["goals"],
+            "latest_result": None if plan["result"] is None else {"result": {"goals": plan["result"]}}}
+
+
+@server.tool(description="Goal Planner (read-only): the investor's active plan with goals and the latest computed result.")
+def get_financial_plan(ctx: Context) -> str:
+    p, err = _who(ctx)
+    if err:
+        return err
+    plan = _plan_view(p)
+    return ok({"plan": plan} if plan else {"plan": None, "message": "No active Goal Planner plan. Create one in the MF Engine app."})
+
+
+@server.tool(description="Goal Planner (read-only): step-by-step explanation of one goal in the latest result.")
+def explain_goal(ctx: Context, goal_id: str) -> str:
+    p, err = _who(ctx)
+    if err:
+        return err
+    plan = _plan_view(p)
+    res = (plan or {}).get("latest_result") or {}
+    g = next((x for x in (res.get("result") or {}).get("goals", []) if x["goal_id"] == goal_id), None)
+    if not g:
+        return json.dumps({"error": True, "code": "NOT_FOUND", "message": "Goal not found in the latest computed result"})
+    return ok({"goal": g, "explain": [{"label": "Inflated cost at target date"}, {"label": "Assets mapped to this goal"},
+                                      {"label": "Gap and required SIP"}]})
+
+
 @server.tool(description="MUTATION: saves risk profile (must never be exposed by FamilyOS).")
 def submitRiskProfile(ctx: Context, answers: dict) -> str:
     return json.dumps({"dry_run": True})

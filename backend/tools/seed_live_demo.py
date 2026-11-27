@@ -17,7 +17,7 @@ from pathlib import Path
 
 BACKEND = Path(__file__).resolve().parent.parent
 SRC = BACKEND / "data"
-ALL = ["portfolio", "tax", "liquidity", "sips"]
+ALL = ["portfolio", "tax", "liquidity", "sips", "goals"]
 
 # member -> (mock identity or None, consent scope: None = not shared, list = shared with that scope)
 CAST: dict[str, dict[str, tuple[str | None, list[str] | None, str]]] = {

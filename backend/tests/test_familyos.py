@@ -438,3 +438,34 @@ def test_live_demo_story_family_head_and_lock_in(live_demo):
     assert not own["viewer_is_family_head"] and "visibility_note" in own
     rajesh = next(m for m in head["members"] if m["name"] == "Rajesh Mehta")
     assert rajesh["ltcg_exemption_remaining"] == 85000 and rajesh["gain_to_book_total"] == 85000
+
+
+# ---------------- goal planner tools (read-only)
+def test_goal_planner_reads_allowed_writes_never():
+    from app import member_gate, mf_engine
+    for t in ("get_financial_plan", "explain_goal", "preview_financial_plan"):
+        assert t in mf_engine.ALLOWLIST
+    for t in ("add_goal", "update_goal", "remove_goal", "update_financial_plan_section", "compute_financial_plan"):
+        assert t in mf_engine.MUTATIONS and t not in mf_engine.ALLOWLIST and t not in member_gate.FAMILY_SAFE
+    assert member_gate.FAMILY_SAFE["get_financial_plan"] == "goals" and "goals" in member_gate.SCOPES
+    with pytest.raises(mf_engine.MFEngineError, match="NOT_ALLOWED"):
+        mf_engine.call("mf_add_goal", {}, "F001", "M001")
+
+
+def test_live_demo_goal_plans_across_the_family(live_demo):
+    from app import mf_engine
+    from app.agentic import ToolBox
+    box = ToolBox(context_engine.store.get("F001"), "M003")                    # Arjun asks
+    names = {t["name"] for t in box.tool_defs}
+    assert {"mf_get_financial_plan", "mf_explain_goal"} <= names and "mf_add_goal" not in names
+    out = box.run("mf_family", {"tool": "get_financial_plan"})
+    assert out["withheld"] == ["M002"]                                          # Priya has not shared
+    rajesh = out["members"]["M001"]["data"]["plan"]
+    house = next(g for g in rajesh["latest_result"]["result"]["goals"] if g["type"] == "HOME")
+    assert rajesh["status"] == "COMPUTED" and house["status"] == "UNFUNDED"
+    assert out["members"]["M003"]["data"]["plan"]["status"] == "DRAFT"         # his own draft, never computed
+    why = mf_engine.call("explain_goal", {"goal_id": "g-rajesh-home"}, "F001", "M001")
+    assert why["goal"]["status"] == "UNFUNDED"
+    iyer = ToolBox(context_engine.store.get("F002"), "M203").run("mf_family", {"tool": "get_financial_plan", "member_ids": ["M201", "M204"]})
+    assert iyer["members"]["M201"]["status"] == "out_of_scope"                 # Venkatesh shares liquidity only
+    assert iyer["members"]["M204"]["data"]["plan"] is None                      # Meera: no plan
