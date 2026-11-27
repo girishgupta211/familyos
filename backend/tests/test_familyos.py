@@ -469,3 +469,41 @@ def test_live_demo_goal_plans_across_the_family(live_demo):
     iyer = ToolBox(context_engine.store.get("F002"), "M203").run("mf_family", {"tool": "get_financial_plan", "member_ids": ["M201", "M204"]})
     assert iyer["members"]["M201"]["status"] == "out_of_scope"                 # Venkatesh shares liquidity only
     assert iyer["members"]["M204"]["data"]["plan"] is None                      # Meera: no plan
+
+
+# ---------------- telemetry + prompt caching (Claude mocked: no API calls, no spend)
+def test_usage_cost_and_cache_ratio():
+    from app import llm
+    call = {"model": "claude-opus-5-5", "speed": None, "input_tokens": 1_000, "output_tokens": 500,
+            "cache_read_input_tokens": 20_000, "cache_creation_input_tokens": 0, "stop_reason": "tool_use", "ms": 900}
+    # 1k×$4 + 500×$20 + 20k×$0.20 per MTok = 0.004 + 0.010 + 0.004
+    assert llm.cost_usd(call) == 0.018
+    assert llm.cost_usd({**call, "speed": "fast"}) == 0.036              # fast mode bills 2×
+    assert llm.cost_usd({**call, "model": "some-unknown-model"}) is None  # no guessed prices
+    t = llm.summarize_usage([call, {**call, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 20_000}])
+    assert t["llm_calls"] == 2 and t["cache_hit_ratio"] == round(20_000 / 42_000, 3)  # 2k uncached + 20k read + 20k written
+    assert t["est_cost_usd"] == round(0.018 + (0.004 + 0.010 + 0.100), 6)
+
+
+def test_agent_turn_caches_prompt_and_records_usage(client, monkeypatch):
+    from types import SimpleNamespace
+    from app import agentic, llm
+    seen = {}
+
+    def fake_create(**kw):
+        seen.update(kw)
+        return SimpleNamespace(content=[], stop_reason="end_turn", model="claude-opus-5-5",
+                               usage=SimpleNamespace(input_tokens=120, output_tokens=40, cache_read_input_tokens=9_000,
+                                                     cache_creation_input_tokens=0, speed="fast"))
+    monkeypatch.setattr(llm, "_create", fake_create)
+    box = agentic.ToolBox(context_engine.store.get("F001"), "M003")
+    state = {"messages": [{"role": "user", "content": "q"}], "turns": 0, "trace": [], "repairs": 0}
+    agentic.agent(state, {"configurable": {"box": box}})
+    assert seen["cache_control"] == {"type": "ephemeral"}
+    assert seen["system"] == agentic.SYSTEM and "TODAY" not in seen["system"]   # cached prefix stays byte-stable
+    assert box.llm_calls[0]["cache_read_input_tokens"] == 9_000 and box.llm_calls[0]["speed"] == "fast"
+    t = agentic.answer_telemetry(box, {"turns": 1, "repairs": 0}, [{"kind": "tool", "ms": 30}, {"kind": "llm", "ms": 900}])
+    assert t["llm_calls"] == 1 and t["tool_calls"] == 1 and t["total_ms"] == 930 and t["est_cost_usd"] is not None
+    agentic.log_telemetry("F001", "M003", t)
+    line = json.loads((context_engine.store.dir / "telemetry" / "F001.jsonl").read_text().splitlines()[-1])
+    assert line["asker"] == "M003" and line["cache_hit_ratio"] > 0.9 and "question" not in line

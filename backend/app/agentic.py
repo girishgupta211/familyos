@@ -221,6 +221,7 @@ class ToolBox:
         self.records_touched: set[str] = set()
         self.assumptions: list[str] = []
         self.live_calls: list[dict] = []   # MF Engine calls (provenance for live data)
+        self.llm_calls: list[dict] = []    # one entry per Claude call: tokens, cache, speed, latency (telemetry)
         # Live MF Engine tools only when the asker has linked their own MF Engine login (one identity per request).
         self.mf_tools = mf_engine.tool_defs() if mf_engine.identity(ctx.family_id, asker) else []
         # Consented fan-out to other members' MF Engine logins (docs/design/family-coordinator.md).
@@ -572,15 +573,20 @@ def agent(state: AState, config) -> AState:
     t0 = time.perf_counter()
     msgs = state["messages"]
     kw = {"speed": SPEED} if SPEED == "fast" else {}
+    # Automatic prompt caching: tools and SYSTEM are byte-stable (no dates or ids; the date is in the user message),
+    # so every later turn of this question, and repeat questions within the cache TTL, read that prefix from cache.
+    base = dict(model=llm.MODEL, max_tokens=16000, system=SYSTEM, tools=_box(config).tool_defs, messages=msgs,
+                output_config={"effort": EFFORT}, cache_control={"type": "ephemeral"})
+    t_call = time.perf_counter()
     try:
-        resp = llm._create(model=llm.MODEL, max_tokens=16000, system=SYSTEM, tools=_box(config).tool_defs, messages=msgs,
-                           output_config={"effort": EFFORT}, **kw)
+        resp = llm._create(**base, **kw)
     except Exception as e:  # fast-mode rate limit / unavailability -> standard speed
         if not kw:
             raise
         log.warning("fast mode unavailable (%s); retrying at standard speed", e)
-        resp = llm._create(model=llm.MODEL, max_tokens=16000, system=SYSTEM, tools=_box(config).tool_defs, messages=msgs,
-                           output_config={"effort": EFFORT})
+        t_call = time.perf_counter()
+        resp = llm._create(**base)
+    _box(config).llm_calls.append(llm.usage_of(resp, llm.MODEL, (time.perf_counter() - t_call) * 1000))
     if resp.stop_reason == "refusal":
         raise RuntimeError("model refused")
     msgs.append({"role": "assistant", "content": resp.content})
@@ -680,6 +686,37 @@ def withheld_check(box: ToolBox, claims: str, missing: list[str]) -> dict:
     return {"check": "Withheld members acknowledged", "ok": not unnamed, "detail": ", ".join(unnamed)}
 
 
+def answer_telemetry(box: "ToolBox", state: AState, trace: list[dict]) -> dict:
+    """What one answer cost: Claude tokens and cache use, tool and MF Engine calls, repairs, and time."""
+    t = llm.summarize_usage(box.llm_calls)
+    t.update({
+        "llm_turns": state.get("turns", 0),
+        "repairs": state.get("repairs", 0),
+        "tool_calls": sum(1 for x in trace if x.get("kind") == "tool"),
+        "mf_engine_calls": len(box.live_calls),
+        "tool_ms": sum(x.get("ms", 0) for x in trace if x.get("kind") == "tool"),
+        "total_ms": sum(x.get("ms", 0) for x in trace),
+        "tools_offered": len(box.tool_defs),
+    })
+    return t
+
+
+TELEMETRY_LOG = logging.getLogger("familyos.telemetry")
+
+
+def log_telemetry(family_id: str, asker: Optional[str], t: dict) -> None:
+    """One JSON line per answer, to the log and to <data dir>/telemetry/<family>.jsonl (no question text, no data)."""
+    line = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "family_id": family_id, "asker": asker, **t}
+    TELEMETRY_LOG.info(json.dumps(line))
+    try:
+        d = store.dir / "telemetry"
+        d.mkdir(parents=True, exist_ok=True)
+        with (d / f"{family_id}.jsonl").open("a") as fh:
+            fh.write(json.dumps(line) + "\n")
+    except OSError as e:
+        log.warning("telemetry write failed: %s", e)
+
+
 def respond(state: AState, config) -> AState:
     t0 = time.perf_counter()
     box = _box(config)
@@ -701,6 +738,8 @@ def respond(state: AState, config) -> AState:
     tool_calls = [t for t in state["trace"] if t.get("kind") == "tool"]
     grounded = all(c["ok"] for c in state["checks"])
     trace = _t(state, "Response assembled", t0, f"{len(supporting)} evidence records, {len(box.calcs)} calculations")
+    telemetry = answer_telemetry(box, state, trace)
+    log_telemetry(ctx.family_id, box.asker, telemetry)
     resp = {
         "answer": f["answer"],
         "key_findings": f["key_findings"],
@@ -725,6 +764,7 @@ def respond(state: AState, config) -> AState:
                                   for m, by_tool in box.withheld_live.items()],
         "remembered_goals": store.get(ctx.family_id).goals,
         "trace": trace,
+        "telemetry": telemetry,
     }
     return {"response": resp, "trace": trace}
 

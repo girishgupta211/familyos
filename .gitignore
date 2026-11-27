@@ -18,3 +18,4 @@ backend/data/private_families.json
 *.pdf
 backend/data/audit/
 backend/.demo/
+backend/data/telemetry/
